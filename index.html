@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Elétrica GP — Catálogo Rápido de Peças</title>
+  <!-- Fonte Inter para leitura rápida de códigos e números tabulares -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F1F5F9;
+      --verde-gp: #0B5D3B;
+      --verde-gp-hover: #08472D;
+      --verde-gp-light: #ECFDF5;
+      --azul-gp: #0F3D6E;
+      --azul-gp-light: #EFF6FF;
+      --ouro-detalhe: #EAB308;
+      --texto-principal: #0F172A;
+      --texto-secundario: #475569;
+      --texto-muted: #94A3B8;
+      --borda: #E2E8F0;
+      --sombra-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --sombra-md: 0 8px 24px -4px rgba(15, 61, 110, 0.08);
+      --raio: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--texto-principal);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* CABEÇALHO COM TEMA SUTIL BRASIL (VERDE ESCURO, AZUL MARINHO E DETALHE OURO) */
+    .topbar {
+      background: linear-gradient(135deg, var(--verde-gp) 0%, var(--azul-gp) 100%);
+      color: #FFFFFF;
+      border-bottom: 3px solid var(--ouro-detalhe);
+      box-shadow: var(--sombra-md);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 8px;
+      transition: background 0.15s ease;
+    }
+
+    .brand-area:active {
+      transform: scale(0.99);
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(234, 179, 8, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.5px;
+      color: #FDE047;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .brand-text span {
+      font-size: 0.78rem;
+      color: #CBD5E1;
+      font-weight: 500;
+      display: block;
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ADE80;
+      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
+    }
+
+    /* ÁREA PRINCIPAL */
+    .main-container {
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.25rem;
+      flex: 1;
+    }
+
+    /* PAINEL DE BUSCA E FILTROS */
+    .search-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--borda);
+      border-radius: var(--raio);
+      padding: 1.25rem;
+      box-shadow: var(--sombra-md);
+      margin-bottom: 1.25rem;
+    }
+
+    .search-box-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.1rem;
+      color: var(--verde-gp);
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1rem 6.5rem 1rem 3.2rem;
+      font-size: 1.08rem;
+      font-weight: 500;
+      color: var(--texto-principal);
+      background: var(--bg-page);
+      border: 2px solid var(--borda);
+      border-radius: 10px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      background: #FFFFFF;
+      border-color: var(--verde-gp);
+      box-shadow: 0 0 0 4px rgba(11, 93, 59, 0.12);
+    }
+
+    .search-input::placeholder {
+      color: var(--texto-muted);
+      font-weight: 400;
+    }
+
+    .search-actions {
+      position: absolute;
+      right: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-clear {
+      background: #E2E8F0;
+      color: var(--texto-secundario);
+      border: none;
+      border-radius: 6px;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+    }
+
+    .btn-clear:hover {
+      background: #CBD5E1;
+      color: var(--texto-principal);
+    }
+
+    .kbd-hint {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--texto-muted);
+      background: #FFFFFF;
+      border: 1px solid var(--borda);
+      padding: 0.2rem 0.45rem;
+      border-radius: 5px;
+    }
+
+    /* FILTROS RÁPIDOS (CHIPS) */
+    .filters-row {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .chips-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      border: 1.5px solid var(--borda);
+      background: #FFFFFF;
+      color: var(--texto-secundario);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .chip:hover {
+      border-color: var(--verde-gp);
+      color: var(--verde-gp);
+      background: var(--verde-gp-light);
+    }
+
+    .chip.active {
+      background: var(--verde-gp);
+      color: #FFFFFF;
+      border-color: var(--verde-gp);
+      box-shadow: 0 3px 10px rgba(11, 93, 59, 0.22);
+    }
+
+    .chip-count {
+      font-size: 0.73rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      background: var(--bg-subtle);
+      color: var(--texto-secundario);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .chip.active .chip-count {
+      background: rgba(255, 255, 255, 0.22);
+      color: #FFFFFF;
+    }
+
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-left: auto;
+    }
+
+    .sort-select {
+      padding: 0.48rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--borda);
+      background: #FFFFFF;
+      color: var(--texto-secundario);
+      font-size: 0.84rem;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* BARRA DE RESULTADOS */
+    .results-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      padding: 0 0.25rem;
+      font-size: 0.88rem;
+      color: var(--texto-secundario);
+    }
+
+    .results-meta strong {
+      color: var(--verde-gp);
+      font-weight: 700;
+    }
+
+    /* TABELA DESKTOP */
+    .table-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--borda);
+      border-radius: var(--raio);
+      box-shadow: var(--sombra-sm);
+      overflow: hidden;
+    }
+
+    table.catalog-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .catalog-table thead th {
+      background: #F1F5F9;
+      color: var(--azul-gp);
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.85rem 1rem;
+      border-bottom: 2px solid var(--borda);
+    }
+
+    .catalog-table tbody tr {
+      border-bottom: 1px solid var(--borda);
+      transition: background 0.12s ease;
+    }
+
+    .catalog-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .catalog-table tbody tr:hover {
+      background-color: #F0FDF4;
+    }
+
+    .catalog-table td {
+      padding: 0.85rem 1rem;
+      font-size: 0.92rem;
+      vertical-align: middle;
+    }
+
+    .col-codigo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--azul-gp);
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+
+    .col-ref {
+      white-space: nowrap;
+    }
+
+    .badge-ref {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.8rem;
+      background: var(--azul-gp-light);
+      color: var(--azul-gp);
+      border: 1px solid #BFDBFE;
+    }
+
+    .badge-cat-IDN { background: #ECFDF5; color: #065F46; border-color: #A7F3D0; }
+    .badge-cat-IDR { background: #EFF6FF; color: #1E40AF; border-color: #BFDBFE; }
+    .badge-cat-RTR { background: #FEFCE8; color: #854D0E; border-color: #FEF08A; }
+    .badge-cat-ETR { background: #F0FDFA; color: #115E59; border-color: #99F6E4; }
+    .badge-cat-BNR { background: #F5F3FF; color: #5B21B6; border-color: #DDD6FE; }
+    .badge-cat-BRC { background: #FFF7ED; color: #9A3412; border-color: #FED7AA; }
+
+    .col-nome {
+      font-weight: 600;
+      color: var(--texto-principal);
+    }
+
+    .sub-info {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--texto-muted);
+      margin-top: 2px;
+    }
+
+    .col-und {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--texto-secundario);
+      text-align: center;
+    }
+
+    .col-preco {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .price-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.06rem;
+      font-weight: 800;
+      color: var(--verde-gp);
+      background: var(--verde-gp-light);
+      padding: 0.35rem 0.7rem;
+      border-radius: 8px;
+      border: 1px solid #A7F3D0;
+      display: inline-block;
+    }
+
+    .price-tag.consulta {
+      color: #9A3412;
+      background: #FFF7ED;
+      border-color: #FED7AA;
+      font-size: 0.82rem;
+    }
+
+    .btn-copy {
+      background: transparent;
+      border: 1px solid var(--borda);
+      color: var(--texto-secundario);
+      padding: 0.4rem 0.65rem;
+      border-radius: 7px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-copy:hover {
+      background: var(--azul-gp);
+      color: #FFFFFF;
+      border-color: var(--azul-gp);
+    }
+
+    mark.hl {
+      background: #FEF08A;
+      color: #0F172A;
+      padding: 0 2px;
+      border-radius: 3px;
+      font-weight: 700;
+    }
+
+    /* ESTADO VAZIO */
+    .empty-state {
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      color: var(--texto-secundario);
+    }
+
+    .empty-state h3 {
+      font-size: 1.1rem;
+      color: var(--texto-principal);
+      margin-bottom: 0.35rem;
+    }
+
+    /* MODAL SECRETO DE ADMINISTRADOR */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      width: 100%;
+      max-width: 620px;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--borda);
+      overflow: hidden;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--verde-gp) 0%, var(--azul-gp) 100%);
+      color: #FFFFFF;
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--ouro-detalhe);
+    }
+
+    .modal-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-close-modal {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #FFFFFF;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .auth-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--borda);
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: var(--verde-gp);
+    }
+
+    .btn-primary {
+      background: var(--verde-gp);
+      color: #FFFFFF;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--verde-gp-hover);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .btn-sair {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #FFFFFF;
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+    }
+
+    .btn-sair:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 0.8rem 1.15rem;
+      border-radius: 10px;
+      border-left: 4px solid var(--ouro-detalhe);
+      box-shadow: var(--sombra-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      transform: translateY(150%);
+      transition: transform 0.25s ease;
+      z-index: 200;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       RESPONSIVIDADE MOBILE (< 768px): TABELA VIRA CARDS AUTOMATICAMENTE
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .topbar-container {
+        padding: 0.75rem 1rem;
+      }
+
+      .kbd-hint {
+        display: none;
+      }
+
+      .search-input {
+        padding: 0.85rem 3.5rem 0.85rem 2.8rem;
+        font-size: 1rem;
+      }
+
+      .chips-group {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        width: 100%;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .chip {
+        flex-shrink: 0;
+      }
+
+      .toolbar-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .sort-select {
+        width: 100%;
+      }
+
+      .table-wrapper {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+
+      .catalog-table thead {
+        display: none;
+      }
+
+      .catalog-table,
+      .catalog-table tbody,
+      .catalog-table tr,
+      .catalog-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .catalog-table tbody tr {
+        background: var(--bg-card);
+        border: 1px solid var(--borda);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        box-shadow: var(--sombra-sm);
+        position: relative;
+      }
+
+      .catalog-table td {
+        padding: 0;
+        border: none;
+      }
+
+      .catalog-table td.col-ref {
+        display: inline-block;
+        width: auto;
+        margin-bottom: 0.45rem;
+      }
+
+      .catalog-table td.col-codigo {
+        display: inline-block;
+        width: auto;
+        float: right;
+        background: var(--bg-subtle);
+        padding: 0.2rem 0.55rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+      }
+
+      .catalog-table td.col-nome {
+        clear: both;
+        font-size: 0.98rem;
+        margin: 0.35rem 0 0.75rem;
+        line-height: 1.35;
+      }
+
+      .catalog-table td.col-und {
+        display: none;
+      }
+
+      .catalog-table td.col-preco {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px dashed var(--borda);
+        padding-top: 0.7rem;
+        text-align: left;
+      }
+
+      .catalog-table td.col-acao {
+        position: absolute;
+        bottom: 0.85rem;
+        right: 1rem;
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CABEÇALHO -->
+  <header class="topbar">
+    <div class="topbar-container">
+      <div class="brand-area" title="Auto Elétrica GP">
+        <div class="brand-badge">GP</div>
+        <div class="brand-text">
+          <h1>Auto Elétrica GP</h1>
+          <span>Sistema Local de Consulta Rápida de Peças</span>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <span class="status-dot"></span>
+        <span id="statusTexto">Carregando catálogo...</span>
+        <button type="button" id="btnSair" class="btn-sair" title="Bloquear o catálogo neste aparelho">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-container">
+    <section class="search-panel">
+      <div class="search-box-wrapper">
+        <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="Pesquise por nome da peça, aplicação (ex: Titan 12V, Gol G5), código (001694) ou referência (IDN 006)..."
+          autocomplete="off"
+          autofocus
+        />
+        <div class="search-actions">
+          <button type="button" id="btnClear" class="btn-clear">Limpar</button>
+          <span class="kbd-hint" title="Atalho de teclado">/ ou F2</span>
+        </div>
+      </div>
+
+      <div class="filters-row">
+        <div class="chips-group" id="chipsContainer">
+          <!-- Gerado dinamicamente via JS -->
+        </div>
+
+        <div class="toolbar-right">
+          <select id="sortSelect" class="sort-select" aria-label="Ordenar peças">
+            <option value="ref">Ordenar: Referência (Padrão)</option>
+            <option value="preco_asc">Ordenar: Menor Preço</option>
+            <option value="preco_desc">Ordenar: Maior Preço</option>
+            <option value="nome">Ordenar: Nome (A-Z)</option>
+            <option value="codigo">Ordenar: Código Interno</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div class="results-meta">
+      <span id="contadorResultados">Exibindo <strong>0</strong> peças</span>
+      <span id="infoDataTabela"></span>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="catalog-table">
+        <thead>
+          <tr>
+            <th style="width: 130px;">Referência</th>
+            <th style="width: 100px;">Código</th>
+            <th>Descrição da Peça (Nome Fantasia)</th>
+            <th style="width: 70px; text-align: center;">Und.</th>
+            <th style="width: 155px; text-align: right;">Preço Varejo</th>
+            <th style="width: 115px; text-align: right;">Orçamento</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaCorpo">
+          <!-- Renderizado em tempo real pelo JS -->
+        </tbody>
+      </table>
+      <div id="emptyState" class="empty-state" style="display: none;">
+        <h3>Nenhuma peça encontrada para essa busca</h3>
+        <p>Tente buscar por termos mais curtos (ex: <strong>914020</strong>, <strong>Titan</strong>, <strong>28 MT</strong>, <strong>IDN 006</strong>).</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- TELA DE SENHA: o catálogo (banco_de_dados.enc) só é descriptografado com a senha correta -->
+  <div class="modal-backdrop" id="loginModal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h2>🔒 Catálogo Protegido — Auto Elétrica GP</h2>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm" class="auth-box">
+          <p style="font-size: 0.9rem; color: var(--texto-secundario);">
+            Digite a senha da loja para acessar a tabela de preços:
+          </p>
+          <input type="password" id="loginPassInput" class="input-field" placeholder="Senha" autocomplete="current-password" />
+          <p id="loginError" style="color: #DC2626; font-size: 0.82rem; display: none; font-weight: 600;"></p>
+          <button type="submit" id="btnLogin" class="btn-primary">Desbloquear Catálogo</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICAÇÃO TOAST -->
+  <div id="toast" class="toast">Copiado para a área de transferência!</div>
+
+  <script>
+    // Configuração das Categorias da Auto Elétrica GP
+    const CATEGORIAS_MAP = {
+      IDN: "Induzido Novo",
+      IDR: "Induzidos Recon",
+      RTR: "Rotores",
+      ETR: "Estatores",
+      BNR: "Bobinas",
+      BRC: "Bobinas na Carcaça"
+    };
+
+    // Arquivo gerado pelo criptografar_catalogo.py (o JSON aberto NÃO é publicado)
+    const ARQUIVO_CATALOGO = "./banco_de_dados.enc";
+    // A senha fica só nesta aba (apagada ao fechar o navegador) para não pedir de novo a cada F5
+    const SESSAO_SENHA_KEY = "auto_eletrica_gp_senha";
+
+    let catalogoPecas = [];
+    let categoriaAtiva = "TODAS";
+    let termoBusca = "";
+    let ordenacaoAtiva = "ref";
+
+    // Elementos DOM
+    const searchInput = document.getElementById("searchInput");
+    const btnClear = document.getElementById("btnClear");
+    const chipsContainer = document.getElementById("chipsContainer");
+    const sortSelect = document.getElementById("sortSelect");
+    const tabelaCorpo = document.getElementById("tabelaCorpo");
+    const emptyState = document.getElementById("emptyState");
+    const contadorResultados = document.getElementById("contadorResultados");
+    const infoDataTabela = document.getElementById("infoDataTabela");
+    const statusTexto = document.getElementById("statusTexto");
+
+    // Normaliza texto (remove acentos e converte para minúsculas) para busca tolerante
+    function normalizarTexto(str) {
+      return (str || "")
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    }
+
+    // Formata float para R$
+    function formatarMoeda(valor) {
+      if (!valor || valor <= 0) return "Sob Consulta";
+      return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function base64ParaBytes(b64) {
+      return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    }
+
+    // Processo inverso do criptografar_catalogo.py: PBKDF2-SHA256 -> AES-256-GCM
+    async function descriptografarCatalogo(enc, senha) {
+      const material = await crypto.subtle.importKey(
+        "raw", new TextEncoder().encode(senha), "PBKDF2", false, ["deriveKey"]
+      );
+      const chave = await crypto.subtle.deriveKey(
+        { name: "PBKDF2", hash: "SHA-256", salt: base64ParaBytes(enc.salt), iterations: enc.iteracoes },
+        material,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
+      // Senha errada faz o decrypt lançar erro (a tag do GCM não confere)
+      const textoPuro = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: base64ParaBytes(enc.iv) },
+        chave,
+        base64ParaBytes(enc.dados)
+      );
+      return JSON.parse(new TextDecoder().decode(textoPuro));
+    }
+
+    let catalogoCriptografado = null;
+
+    async function carregarArquivoCriptografado() {
+      if (catalogoCriptografado) return catalogoCriptografado;
+      const resp = await fetch(`${ARQUIVO_CATALOGO}?t=${Date.now()}`);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      catalogoCriptografado = await resp.json();
+      return catalogoCriptografado;
+    }
+
+    // Tenta abrir o catálogo com a senha. Retorna true se deu certo.
+    async function desbloquearCatalogo(senha) {
+      const enc = await carregarArquivoCriptografado();
+      try {
+        const dados = await descriptografarCatalogo(enc, senha);
+        try { sessionStorage.setItem(SESSAO_SENHA_KEY, senha); } catch (e) {}
+        aplicarDadosCatalogo(dados);
+        fecharLogin();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function inicializarCatalogo() {
+      if (!window.crypto || !crypto.subtle) {
+        statusTexto.textContent = "Abra pelo endereço https:// ou http://localhost";
+        return;
+      }
+
+      let senhaSalva = null;
+      try { senhaSalva = sessionStorage.getItem(SESSAO_SENHA_KEY); } catch (e) {}
+
+      try {
+        if (senhaSalva && await desbloquearCatalogo(senhaSalva)) return;
+      } catch (err) {
+        console.error(err);
+        statusTexto.textContent = "Não foi possível carregar banco_de_dados.enc";
+      }
+
+      // Senha salva inválida (ex.: senha trocada numa atualização) ou primeira visita
+      try { sessionStorage.removeItem(SESSAO_SENHA_KEY); } catch (e) {}
+      abrirLogin();
+    }
+
+    function aplicarDadosCatalogo(dados) {
+      catalogoPecas = (dados.pecas || []).map(p => ({
+        ...p,
+        _busca: normalizarTexto(`${p.codigo} ${p.referencia} ${p.nome} ${p.categoria} ${p.categoria_nome}`)
+      }));
+
+      statusTexto.textContent = `${catalogoPecas.length.toLocaleString("pt-BR")} peças ativas`;
+      infoDataTabela.textContent = dados.data_tabela
+        ? `Tabela ref.: ${dados.data_tabela} • Atualizado: ${dados.ultima_atualizacao || "Hoje"}`
+        : "";
+      document.getElementById("btnSair").style.display = "inline-block";
+
+      renderizarChips();
+      atualizarLista();
+    }
+
+    // Renderiza os botões estilo "Chips" das categorias
+    function renderizarChips() {
+      const contagens = { TODAS: catalogoPecas.length };
+      Object.keys(CATEGORIAS_MAP).forEach(sigla => (contagens[sigla] = 0));
+      catalogoPecas.forEach(p => {
+        if (contagens[p.categoria] !== undefined) contagens[p.categoria]++;
+      });
+
+      let html = `
+        <button type="button" class="chip ${categoriaAtiva === "TODAS" ? "active" : ""}" data-cat="TODAS">
+          Todas <span class="chip-count">${contagens.TODAS}</span>
+        </button>
+      `;
+
+      for (const [sigla, nome] of Object.entries(CATEGORIAS_MAP)) {
+        const ativo = categoriaAtiva === sigla ? "active" : "";
+        html += `
+          <button type="button" class="chip ${ativo}" data-cat="${sigla}" title="${nome}">
+            ${sigla} · ${nome} <span class="chip-count">${contagens[sigla] || 0}</span>
+          </button>
+        `;
+      }
+
+      chipsContainer.innerHTML = html;
+
+      chipsContainer.querySelectorAll(".chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+          categoriaAtiva = btn.getAttribute("data-cat");
+          renderizarChips();
+          atualizarLista();
+        });
+      });
+    }
+
+    // Destaca os termos pesquisados no texto
+    function destacarTermos(texto, tokens) {
+      if (!tokens.length || !texto) return texto;
+      let resultado = texto;
+      tokens.forEach(tok => {
+        if (tok.length < 2) return;
+        const escapado = tok.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const regex = new RegExp(`(${escapado})`, "gi");
+        resultado = resultado.replace(regex, '<mark class="hl">$1</mark>');
+      });
+      return resultado;
+    }
+
+    // Filtra, ordena e desenha a tabela/cards em tempo real
+    function atualizarLista() {
+      const buscaNorm = normalizarTexto(termoBusca.trim());
+      const tokens = buscaNorm.split(/\s+/).filter(Boolean);
+
+      btnClear.style.display = termoBusca.length > 0 ? "inline-block" : "none";
+
+      let filtradas = catalogoPecas.filter(p => {
+        if (categoriaAtiva !== "TODAS" && p.categoria !== categoriaAtiva) return false;
+        if (!tokens.length) return true;
+        return tokens.every(t => p._busca.includes(t));
+      });
+
+      // Ordenação
+      filtradas.sort((a, b) => {
+        if (ordenacaoAtiva === "preco_asc") {
+          const pa = a.preco > 0 ? a.preco : 999999;
+          const pb = b.preco > 0 ? b.preco : 999999;
+          return pa - pb;
+        }
+        if (ordenacaoAtiva === "preco_desc") return (b.preco || 0) - (a.preco || 0);
+        if (ordenacaoAtiva === "nome") return a.nome.localeCompare(b.nome, "pt-BR");
+        if (ordenacaoAtiva === "codigo") return a.codigo.localeCompare(b.codigo);
+        return a.referencia.localeCompare(b.referencia, "pt-BR", { numeric: true });
+      });
+
+      contadorResultados.innerHTML = `Exibindo <strong>${filtradas.length.toLocaleString("pt-BR")}</strong> de ${catalogoPecas.length.toLocaleString("pt-BR")} peças`;
+
+      if (filtradas.length === 0) {
+        tabelaCorpo.innerHTML = "";
+        emptyState.style.display = "block";
+        return;
+      }
+
+      emptyState.style.display = "none";
+
+      const linhasHtml = filtradas.map(p => {
+        const codigoHl = destacarTermos(p.codigo, tokens);
+        const refHl = destacarTermos(p.referencia, tokens);
+        const nomeHl = destacarTermos(p.nome, tokens);
+        const precoTexto = p.preco > 0 ? formatarMoeda(p.preco) : "Sob Consulta";
+        const classePreco = p.preco > 0 ? "price-tag" : "price-tag consulta";
+        const textoOrcamento = `*${p.codigo}* - ${p.nome} (Ref: ${p.referencia}) — *${precoTexto}*`;
+
+        return `
+          <tr>
+            <td class="col-ref">
+              <span class="badge-ref badge-cat-${p.categoria}">${refHl}</span>
+            </td>
+            <td class="col-codigo">#${codigoHl}</td>
+            <td class="col-nome">
+              ${nomeHl}
+              <span class="sub-info">${p.categoria_nome} • Fabricante: ${p.fabricante || "DIVERSOS"}</span>
+            </td>
+            <td class="col-und">${p.unidade}</td>
+            <td class="col-preco">
+              <span class="${classePreco}">${precoTexto}</span>
+            </td>
+            <td class="col-acao" style="text-align: right;">
+              <button type="button" class="btn-copy" onclick="copiarOrcamento('${textoOrcamento.replace(/'/g, "\\'")}')">
+                📋 Copiar
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      tabelaCorpo.innerHTML = linhasHtml.join("");
+    }
+
+    // Copiar item para WhatsApp / Orçamento
+    window.copiarOrcamento = function(texto) {
+      navigator.clipboard.writeText(texto).then(() => {
+        mostrarToast("Peça copiada para o orçamento!");
+      });
+    };
+
+    function mostrarToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    // Eventos de Busca e Teclado
+    searchInput.addEventListener("input", e => {
+      termoBusca = e.target.value;
+      atualizarLista();
+    });
+
+    btnClear.addEventListener("click", () => {
+      termoBusca = "";
+      searchInput.value = "";
+      searchInput.focus();
+      atualizarLista();
+    });
+
+    sortSelect.addEventListener("change", e => {
+      ordenacaoAtiva = e.target.value;
+      atualizarLista();
+    });
+
+    document.addEventListener("keydown", e => {
+      // Com a tela de senha aberta, "/" precisa poder ser digitado na senha
+      if (document.getElementById("loginModal").classList.contains("open")) return;
+      if ((e.key === "/" || e.key === "F2") && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      } else if (e.key === "Escape" && termoBusca) {
+        btnClear.click();
+      }
+    });
+
+    // =========================================================================
+    // TELA DE SENHA (DESBLOQUEIO DO CATÁLOGO CRIPTOGRAFADO)
+    // =========================================================================
+    const loginModal = document.getElementById("loginModal");
+    const loginForm = document.getElementById("loginForm");
+    const loginPassInput = document.getElementById("loginPassInput");
+    const loginError = document.getElementById("loginError");
+    const btnLogin = document.getElementById("btnLogin");
+
+    function abrirLogin() {
+      loginModal.classList.add("open");
+      statusTexto.textContent = "Catálogo bloqueado";
+      setTimeout(() => loginPassInput.focus(), 100);
+    }
+
+    function fecharLogin() {
+      loginModal.classList.remove("open");
+      loginPassInput.value = "";
+      loginError.style.display = "none";
+      searchInput.focus();
+    }
+
+    function mostrarErroLogin(msg) {
+      loginError.textContent = msg;
+      loginError.style.display = "block";
+      loginPassInput.select();
+    }
+
+    loginForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      const senha = loginPassInput.value;
+      if (!senha) return;
+
+      btnLogin.disabled = true;
+      btnLogin.textContent = "Verificando...";
+      try {
+        if (!(await desbloquearCatalogo(senha))) {
+          mostrarErroLogin("Senha incorreta. Tente novamente.");
+        }
+      } catch (err) {
+        console.error(err);
+        mostrarErroLogin("Não foi possível carregar o arquivo banco_de_dados.enc.");
+      } finally {
+        btnLogin.disabled = false;
+        btnLogin.textContent = "Desbloquear Catálogo";
+      }
+    });
+
+    // Bloqueia de novo (útil em computador compartilhado)
+    document.getElementById("btnSair").addEventListener("click", () => {
+      try { sessionStorage.removeItem(SESSAO_SENHA_KEY); } catch (e) {}
+      location.reload();
+    });
+
+    // Inicializa ao abrir a página
+    inicializarCatalogo();
+  </script>
+</body>
+</html>
