@@ -303,12 +303,27 @@
   </main>
 
   <script>
-    // Repositório onde o site está publicado (GitHub Pages)
-    const REPO_DONO = "AliceDomingos";
-    const REPO_NOME = "catalogo-Valores";
-    const REPO_BRANCH = "main";
+    // O repositório é descoberto pelo endereço da página, então renomear o repositório
+    // não exige mudar este arquivo:
+    //   https://dono.github.io/nome-do-repo/atualizar.html  ->  dono/nome-do-repo
+    // Fora do github.io (domínio próprio ou teste local), use ?repo=dono/nome-do-repo no endereço.
+    function descobrirRepositorio() {
+      const manual = new URLSearchParams(location.search).get("repo");
+      if (manual && /^[\w.-]+\/[\w.-]+$/.test(manual)) {
+        const [dono, nome] = manual.split("/");
+        return { dono, nome };
+      }
+      const m = location.hostname.match(/^([\w-]+)\.github\.io$/i);
+      if (!m) return null;
+      const primeiraPasta = location.pathname.split("/").filter(Boolean)[0];
+      // Sem pasta (ou direto num .html) é o site principal da conta: repositório "dono.github.io"
+      const nome = primeiraPasta && !primeiraPasta.includes(".") ? decodeURIComponent(primeiraPasta) : location.hostname;
+      return { dono: m[1], nome };
+    }
+
+    const REPO = descobrirRepositorio();
     const ARQUIVO_ENC = "banco_de_dados.enc";
-    const API_ARQUIVO = `https://api.github.com/repos/${REPO_DONO}/${REPO_NOME}/contents/${ARQUIVO_ENC}`;
+    const API_ARQUIVO = REPO ? `https://api.github.com/repos/${REPO.dono}/${REPO.nome}/contents/${ARQUIVO_ENC}` : null;
     const TOKEN_KEY = "auto_eletrica_gp_github_token";
 
     // Mesmos parâmetros do criptografar_catalogo.py
@@ -334,7 +349,7 @@
     let encNovo = null;           // catálogo novo já criptografado (texto do .enc)
 
     const $ = id => document.getElementById(id);
-    $("repoNome").textContent = `${REPO_DONO}/${REPO_NOME}`;
+    $("repoNome").textContent = REPO ? `${REPO.dono}/${REPO.nome}` : "(não identificado)";
 
     function mostrarMsg(id, tipo, texto) {
       const el = $(id);
@@ -423,7 +438,7 @@
 
     // Busca o .enc publicado (direto do repositório, sem esperar o GitHub Pages)
     async function buscarEncAtual() {
-      const arq = await apiGithub(`${API_ARQUIVO}?ref=${REPO_BRANCH}&t=${Date.now()}`, { cache: "no-store" });
+      const arq = await apiGithub(`${API_ARQUIVO}?t=${Date.now()}`, { cache: "no-store" });
       shaAtual = arq.sha;
       return JSON.parse(atob(arq.content.replace(/\s/g, "")));
     }
@@ -431,7 +446,7 @@
     function explicarErroGithub(err) {
       if (err.status === 401) return "Token inválido ou expirado. Peça um novo para a dona do repositório.";
       if (err.status === 403) return "O token não tem permissão de escrita neste repositório (Contents: Read and write).";
-      if (err.status === 404) return `Repositório ou arquivo ${ARQUIVO_ENC} não encontrado (ou o token não tem acesso a ${REPO_DONO}/${REPO_NOME}).`;
+      if (err.status === 404) return `Repositório ou arquivo ${ARQUIVO_ENC} não encontrado (ou o token não tem acesso a ${REPO.dono}/${REPO.nome}).`;
       if (err.status === 409) return "O catálogo foi alterado por outra pessoa enquanto você trabalhava. Recarregue a página e tente de novo.";
       return `Falha ao falar com o GitHub (${err.message}). Verifique a internet.`;
     }
@@ -440,6 +455,12 @@
     // PASSO 1: TOKEN
     // =========================================================================
     async function conectarToken(valor) {
+      if (!REPO) {
+        mostrarMsg("msgToken", "erro",
+          "Não foi possível identificar o repositório por este endereço. Abra a página pelo link do github.io " +
+          "ou acrescente ?repo=dono/repositorio no final do endereço.");
+        return;
+      }
       token = valor.trim();
       if (!token) return;
       $("btnToken").disabled = true;
@@ -450,7 +471,7 @@
           try { localStorage.setItem(TOKEN_KEY, token); } catch (e) {}
         }
         $("btnEsquecerToken").style.display = "inline-block";
-        mostrarMsg("msgToken", "ok", `Conectado ao repositório ${REPO_DONO}/${REPO_NOME}.`);
+        mostrarMsg("msgToken", "ok", `Conectado ao repositório ${REPO.dono}/${REPO.nome}.`);
         liberarCard("cardSenha", true);
         $("senhaInput").focus();
       } catch (err) {
@@ -712,8 +733,7 @@
           body: JSON.stringify({
             message: `Atualiza catálogo: ${payloadNovo.total_itens} peças (tabela ${payloadNovo.data_tabela})`,
             content: btoa(conteudo),   // o .enc só tem caracteres ASCII
-            sha: shaAtual,
-            branch: REPO_BRANCH
+            sha: shaAtual              // sem "branch": o GitHub usa o branch padrão do repositório
           })
         });
         shaAtual = resp.content.sha;
