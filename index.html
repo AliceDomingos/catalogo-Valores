@@ -751,6 +751,65 @@
       justify-content: flex-end;
     }
 
+    .popover.menu {
+      width: 270px;
+      padding: 0.6rem;
+    }
+
+    .popover.menu h4 {
+      padding: 0.25rem 0.4rem 0;
+    }
+
+    .menu-opcao {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.55rem 0.5rem;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--texto-principal);
+    }
+
+    .menu-opcao:hover:not(:disabled) {
+      background: var(--bg-subtle);
+    }
+
+    .menu-opcao:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+
+    .menu-opcao strong {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .menu-opcao small {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--texto-secundario);
+    }
+
+    .menu-icone {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .menu-icone.excel { background: #1D6F42; }
+    .menu-icone.pdf { background: #B91C1C; }
+
     /* TELA DE SENHA */
     .modal-backdrop {
       position: fixed;
@@ -1060,6 +1119,17 @@
   <!-- POPOVERS -->
   <div class="popover" id="popFiltro"></div>
   <div class="popover" id="popColunas"></div>
+  <div class="popover menu" id="popExportar">
+    <h4>Exportar peças filtradas</h4>
+    <button type="button" class="menu-opcao" data-exportar="excel">
+      <span class="menu-icone excel">XLS</span>
+      <span><strong>Excel</strong><small>Planilha .xlsx, preços como número</small></span>
+    </button>
+    <button type="button" class="menu-opcao" data-exportar="pdf">
+      <span class="menu-icone pdf">PDF</span>
+      <span><strong>PDF</strong><small>Tabela pronta para imprimir ou enviar</small></span>
+    </button>
+  </div>
 
   <!-- TELA DE SENHA: o catálogo (banco_de_dados.enc) só é descriptografado com a senha correta -->
   <div class="modal-backdrop" id="loginModal">
@@ -1115,6 +1185,7 @@
       anterior: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>',
       proxima: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>',
       ultima: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>',
+      abrirMenu: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg>',
       copiar: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>'
     };
 
@@ -1159,10 +1230,12 @@
     const statusTexto = $("statusTexto");
     const popFiltro = $("popFiltro");
     const popColunas = $("popColunas");
+    const popExportar = $("popExportar");
+    let dataTabela = "";
 
     // Ícones dos botões fixos
     $("btnRecarregar").innerHTML = ICONES.recarregar;
-    $("btnExportar").innerHTML = `${ICONES.exportar}<span class="rotulo">Exportar</span>`;
+    $("btnExportar").innerHTML = `${ICONES.exportar}<span class="rotulo">Exportar</span>${ICONES.abrirMenu}`;
     $("btnColunas").innerHTML = ICONES.colunas;
     $("btnPrimeira").innerHTML = ICONES.primeira;
     $("btnAnterior").innerHTML = ICONES.anterior;
@@ -1358,6 +1431,7 @@
       }));
 
       statusTexto.textContent = `${catalogoPecas.length.toLocaleString("pt-BR")} peças ativas`;
+      dataTabela = dados.data_tabela || "";
       infoDataTabela.textContent = dados.data_tabela
         ? `Tabela ref.: ${dados.data_tabela} • Atualizado: ${dados.ultima_atualizacao || "Hoje"}`
         : "Tabela de preços";
@@ -1678,6 +1752,7 @@
     function fecharPopovers() {
       popFiltro.classList.remove("open");
       popColunas.classList.remove("open");
+      popExportar.classList.remove("open");
       popoverAncora = null;
     }
 
@@ -1798,36 +1873,155 @@
     // Fecha os popovers ao clicar fora
     document.addEventListener("mousedown", e => {
       if (!popoverAncora) return;
-      if (e.target.closest(".popover") || e.target.closest("[data-filtrar]") || e.target.closest("#btnColunas")) return;
+      if (e.target.closest(".popover") || e.target.closest("[data-filtrar]") ||
+          e.target.closest("#btnColunas") || e.target.closest("#btnExportar")) return;
       fecharPopovers();
     });
     window.addEventListener("resize", fecharPopovers);
 
     // =========================================================================
-    // EXPORTAR (CSV QUE ABRE NO EXCEL)
+    // EXPORTAR (EXCEL OU PDF) — bibliotecas carregadas só na hora de usar
     // =========================================================================
-    $("btnExportar").addEventListener("click", () => {
+    const LIBS = {
+      excel: ["https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"],
+      pdf: [
+        "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"
+      ]
+    };
+    const scriptsCarregados = {};
+
+    function carregarScript(url) {
+      if (!scriptsCarregados[url]) {
+        scriptsCarregados[url] = new Promise((resolve, reject) => {
+          const s = document.createElement("script");
+          s.src = url;
+          s.onload = resolve;
+          s.onerror = () => {
+            delete scriptsCarregados[url];
+            reject(new Error(`Falha ao carregar ${url}`));
+          };
+          document.head.appendChild(s);
+        });
+      }
+      return scriptsCarregados[url];
+    }
+
+    async function carregarLibs(tipo) {
+      // Em sequência: o plugin de tabela do PDF depende do jsPDF já carregado
+      for (const url of LIBS[tipo]) await carregarScript(url);
+    }
+
+    function nomeArquivoExport(extensao) {
+      return `catalogo-gp-${new Date().toISOString().slice(0, 10)}.${extensao}`;
+    }
+
+    // Resumo do que está filtrado, impresso no topo do PDF
+    function descreverSelecao() {
+      const partes = [];
+      if (termoBusca.trim()) partes.push(`Busca: "${termoBusca.trim()}"`);
+      COLUNAS.filter(c => c.filtro && filtroAtivo(c.id)).forEach(c => partes.push(descreverFiltro(c.id)));
+      return partes.length ? partes.join(" • ") : "Todas as peças";
+    }
+
+    function exportarExcel(pecas) {
+      const linhas = [["Referência", "Código", "Descrição", "Categoria", "Und.", "Fabricante", "Preço (R$)"]];
+      pecas.forEach(p => linhas.push([
+        p.referencia, p.codigo, p.nome, p.categoria_nome, p.unidade, p.fabricante || "DIVERSOS",
+        p.preco > 0 ? p.preco : "Sob Consulta"
+      ]));
+      const planilha = XLSX.utils.aoa_to_sheet(linhas);
+      // Preço como número com formato de moeda (dá para somar e ordenar no Excel)
+      for (let r = 1; r < linhas.length; r++) {
+        const cel = planilha[XLSX.utils.encode_cell({ r, c: 6 })];
+        if (cel && cel.t === "n") cel.z = '"R$" #,##0.00';
+      }
+      planilha["!cols"] = [{ wch: 14 }, { wch: 10 }, { wch: 52 }, { wch: 20 }, { wch: 6 }, { wch: 12 }, { wch: 14 }];
+      planilha["!autofilter"] = { ref: `A1:G${linhas.length}` };
+      const livro = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(livro, planilha, "Peças");
+      XLSX.writeFile(livro, nomeArquivoExport("xlsx"));
+    }
+
+    function exportarPdf(pecas) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const largura = doc.internal.pageSize.getWidth();
+      const agora = new Date().toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(15);
+      doc.setTextColor(11, 93, 59);
+      doc.text("Auto Elétrica GP — Tabela de Preços", 14, 16);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(71, 85, 105);
+      doc.text(`Tabela ref.: ${dataTabela || "-"}  •  ${pecas.length} peças  •  Gerado em ${agora}`, 14, 22);
+      doc.text(doc.splitTextToSize(descreverSelecao(), largura - 28), 14, 27);
+
+      doc.autoTable({
+        startY: 32,
+        head: [["Referência", "Código", "Descrição", "Und.", "Preço"]],
+        body: pecas.map(p => [p.referencia, p.codigo, p.nome, p.unidade, formatarMoeda(p.preco)]),
+        styles: { font: "helvetica", fontSize: 8.5, cellPadding: 1.8, textColor: [15, 23, 42] },
+        headStyles: { fillColor: [11, 93, 59], textColor: 255, fontStyle: "bold" },
+        alternateRowStyles: { fillColor: [241, 245, 249] },
+        columnStyles: {
+          0: { cellWidth: 24 },
+          1: { cellWidth: 18 },
+          3: { cellWidth: 12, halign: "center" },
+          4: { cellWidth: 28, halign: "right", fontStyle: "bold" }
+        },
+        margin: { left: 14, right: 14 },
+        // columnStyles só vale para o corpo; alinha também o título das colunas
+        didParseCell: data => {
+          if (data.section !== "head") return;
+          if (data.column.index === 3) data.cell.styles.halign = "center";
+          if (data.column.index === 4) data.cell.styles.halign = "right";
+        },
+        didDrawPage: () => {
+          const altura = doc.internal.pageSize.getHeight();
+          doc.setFontSize(8);
+          doc.setTextColor(148, 163, 184);
+          doc.text(`Página ${doc.internal.getNumberOfPages()}`, largura - 14, altura - 8, { align: "right" });
+        }
+      });
+
+      doc.save(nomeArquivoExport("pdf"));
+    }
+
+    $("btnExportar").addEventListener("click", e => {
+      if (popExportar.classList.contains("open")) {
+        fecharPopovers();
+        return;
+      }
+      fecharPopovers();
+      posicionarPopover(popExportar, e.currentTarget);
+    });
+
+    popExportar.addEventListener("click", async e => {
+      const opcao = e.target.closest("[data-exportar]");
+      if (!opcao) return;
+      const tipo = opcao.dataset.exportar;
       if (!filtradasAtual.length) {
         mostrarToast("Nenhuma peça para exportar.");
         return;
       }
-      const cel = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
-      const linhas = [["Referência", "Código", "Descrição", "Categoria", "Und.", "Fabricante", "Preço"].map(cel).join(";")];
-      filtradasAtual.forEach(p => {
-        linhas.push([
-          p.referencia, p.codigo, p.nome, p.categoria_nome, p.unidade, p.fabricante || "DIVERSOS",
-          p.preco > 0 ? p.preco.toFixed(2).replace(".", ",") : "Sob Consulta"
-        ].map(cel).join(";"));
-      });
-      // BOM + ";" para o Excel em português abrir com acentos e colunas certas
-      const blob = new Blob(["﻿" + linhas.join("\r\n")], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `catalogo-gp-${new Date().toISOString().slice(0, 10)}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
-      mostrarToast(`${filtradasAtual.length} peças exportadas.`);
+      const botoes = popExportar.querySelectorAll(".menu-opcao");
+      botoes.forEach(b => (b.disabled = true));
+      mostrarToast(tipo === "pdf" ? "Gerando PDF..." : "Gerando planilha...");
+      try {
+        await carregarLibs(tipo);
+        if (tipo === "pdf") exportarPdf(filtradasAtual);
+        else exportarExcel(filtradasAtual);
+        fecharPopovers();
+        mostrarToast(`${filtradasAtual.length} peças exportadas em ${tipo === "pdf" ? "PDF" : "Excel"}.`);
+      } catch (err) {
+        console.error(err);
+        mostrarToast("Não foi possível exportar. Verifique a internet.");
+      } finally {
+        botoes.forEach(b => (b.disabled = false));
+      }
     });
 
     $("btnRecarregar").addEventListener("click", recarregarCatalogo);
