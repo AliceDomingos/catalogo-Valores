@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Auto Elétrica GP — Atualizar Catálogo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- PDF.js: leitura dos PDFs do TGA direto no navegador -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <style>
+    :root {
+      --bg-page: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F1F5F9;
+      --verde-gp: #0B5D3B;
+      --verde-gp-hover: #08472D;
+      --verde-gp-light: #ECFDF5;
+      --azul-gp: #0F3D6E;
+      --ouro-detalhe: #EAB308;
+      --vermelho: #DC2626;
+      --vermelho-light: #FEF2F2;
+      --texto-principal: #0F172A;
+      --texto-secundario: #475569;
+      --texto-muted: #94A3B8;
+      --borda: #E2E8F0;
+      --sombra-md: 0 8px 24px -4px rgba(15, 61, 110, 0.08);
+      --raio: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--texto-principal);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: linear-gradient(135deg, var(--verde-gp) 0%, var(--azul-gp) 100%);
+      color: #FFFFFF;
+      border-bottom: 3px solid var(--ouro-detalhe);
+      box-shadow: var(--sombra-md);
+    }
+
+    .topbar-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(234, 179, 8, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #FDE047;
+      flex-shrink: 0;
+    }
+
+    .topbar h1 { font-size: 1.2rem; font-weight: 800; line-height: 1.15; }
+    .topbar span { font-size: 0.78rem; color: #CBD5E1; font-weight: 500; display: block; }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--borda);
+      border-radius: var(--raio);
+      padding: 1.25rem;
+      box-shadow: var(--sombra-md);
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      color: var(--azul-gp);
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .passo {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--verde-gp);
+      color: #FFFFFF;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card.bloqueado { opacity: 0.5; pointer-events: none; }
+
+    .ajuda { font-size: 0.85rem; color: var(--texto-secundario); margin-bottom: 0.85rem; }
+    .ajuda a { color: var(--azul-gp); }
+
+    label.campo { display: block; font-size: 0.82rem; font-weight: 600; margin: 0.6rem 0 0.3rem; }
+
+    .input-field {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      border: 2px solid var(--borda);
+      border-radius: 8px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .input-field:focus { border-color: var(--verde-gp); }
+
+    .linha-check {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.84rem;
+      color: var(--texto-secundario);
+      margin-top: 0.6rem;
+    }
+
+    .botoes { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
+
+    .btn-primary {
+      background: var(--verde-gp);
+      color: #FFFFFF;
+      border: none;
+      padding: 0.75rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-primary:hover { background: var(--verde-gp-hover); }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-secundario {
+      background: transparent;
+      border: 1px solid var(--borda);
+      color: var(--texto-secundario);
+      padding: 0.75rem 1.1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-secundario:hover { background: var(--bg-subtle); color: var(--texto-principal); }
+
+    .dropzone {
+      display: block;
+      border: 2px dashed var(--verde-gp);
+      background: var(--verde-gp-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .dropzone.arrastando { background: #D1FAE5; }
+
+    .msg {
+      margin-top: 0.75rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .msg.ok { display: block; background: var(--verde-gp-light); color: var(--verde-gp); }
+    .msg.erro { display: block; background: var(--vermelho-light); color: var(--vermelho); }
+    .msg.info { display: block; background: var(--bg-subtle); color: var(--texto-secundario); }
+
+    table.resumo { width: 100%; border-collapse: collapse; margin-top: 0.9rem; font-size: 0.88rem; }
+    .resumo th, .resumo td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--borda); text-align: left; }
+    .resumo th { font-size: 0.74rem; text-transform: uppercase; color: var(--azul-gp); background: var(--bg-subtle); }
+    .resumo td.num { font-family: 'JetBrains Mono', monospace; text-align: right; }
+    .resumo tr.ruim td { color: var(--vermelho); font-weight: 600; }
+
+    code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+
+    @media (max-width: 600px) {
+      .botoes button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-container">
+      <div class="brand-badge">GP</div>
+      <div>
+        <h1>Atualizar Catálogo</h1>
+        <span>Auto Elétrica GP — publicação da nova tabela de preços</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- PASSO 1: TOKEN DO GITHUB -->
+    <section class="card" id="cardToken">
+      <h2><span class="passo">1</span> Chave do GitHub</h2>
+      <p class="ajuda">
+        Token que permite este site publicar o catálogo no repositório
+        <code id="repoNome"></code>. Peça para a dona do repositório.
+      </p>
+      <label class="campo" for="tokenInput">Token</label>
+      <input type="password" id="tokenInput" class="input-field" placeholder="github_pat_..." autocomplete="off" />
+      <label class="linha-check">
+        <input type="checkbox" id="lembrarToken" /> Lembrar neste computador
+      </label>
+      <div class="botoes">
+        <button type="button" id="btnToken" class="btn-primary">Conectar</button>
+        <button type="button" id="btnEsquecerToken" class="btn-secundario" style="display: none;">Esquecer token</button>
+      </div>
+      <div id="msgToken" class="msg"></div>
+    </section>
+
+    <!-- PASSO 2: SENHA DO CATÁLOGO -->
+    <section class="card bloqueado" id="cardSenha">
+      <h2><span class="passo">2</span> Senha do catálogo</h2>
+      <p class="ajuda">
+        A mesma senha que os funcionários usam para abrir o catálogo. Ela é conferida com o catálogo publicado,
+        para não trocar a senha por engano.
+      </p>
+      <form id="formSenha">
+        <input type="password" id="senhaInput" class="input-field" placeholder="Senha do catálogo" autocomplete="current-password" />
+        <div class="botoes">
+          <button type="submit" id="btnSenha" class="btn-primary">Conferir senha</button>
+        </div>
+      </form>
+      <div id="msgSenha" class="msg"></div>
+    </section>
+
+    <!-- PASSO 3: PDFs -->
+    <section class="card bloqueado" id="cardPdfs">
+      <h2><span class="passo">3</span> PDFs da nova tabela</h2>
+      <p class="ajuda">
+        Selecione os <strong>6 PDFs</strong> exportados do TGA, todos juntos. Cada arquivo precisa ter a sigla da categoria no nome:
+        <code>IDN</code>, <code>IDR</code>, <code>RTR</code>, <code>ETR</code>, <code>BNR</code> ou <code>BRC</code>
+        (ex.: <code>IDN.pdf</code>).
+      </p>
+      <label class="dropzone" id="dropzone" for="pdfInput">
+        <input type="file" id="pdfInput" accept=".pdf" multiple style="display: none;" />
+        <div style="font-weight: 700; color: var(--verde-gp);">📄 Clique aqui ou arraste os PDFs</div>
+        <div style="font-size: 0.78rem; color: var(--texto-secundario); margin-top: 4px;">Os arquivos são lidos só neste navegador</div>
+      </label>
+      <div id="msgPdfs" class="msg"></div>
+      <div id="resumoPdfs"></div>
+    </section>
+
+    <!-- PASSO 4: PUBLICAR -->
+    <section class="card bloqueado" id="cardPublicar">
+      <h2><span class="passo">4</span> Publicar</h2>
+      <p class="ajuda" id="textoPublicar">Confira o resumo acima antes de publicar.</p>
+      <div class="botoes">
+        <button type="button" id="btnPublicar" class="btn-primary">Publicar no site</button>
+        <button type="button" id="btnBaixar" class="btn-secundario">Só baixar o .enc</button>
+      </div>
+      <div id="msgPublicar" class="msg"></div>
+    </section>
+  </main>
+
+  <script>
+    // Repositório onde o site está publicado (GitHub Pages)
+    const REPO_DONO = "AliceDomingos";
+    const REPO_NOME = "catalogo-eletrica";
+    const REPO_BRANCH = "main";
+    const ARQUIVO_ENC = "banco_de_dados.enc";
+    const API_ARQUIVO = `https://api.github.com/repos/${REPO_DONO}/${REPO_NOME}/contents/${ARQUIVO_ENC}`;
+    const TOKEN_KEY = "auto_eletrica_gp_github_token";
+
+    // Mesmos parâmetros do criptografar_catalogo.py
+    const ITERACOES_PBKDF2 = 600000;
+
+    // Mesmas regras do extrair_catalogo.py
+    const CATEGORIAS_MAP = {
+      IDN: "Induzido Novo",
+      IDR: "Induzidos Recon",
+      RTR: "Rotores",
+      ETR: "Estatores",
+      BNR: "Bobinas",
+      BRC: "Bobinas na Carcaça"
+    };
+    const REGEX_LINHA_PECA = /^(\d{6})\s+(.+?)(?:\s+|(?<=[^\s]))(UN\.\.|UND|KIT|PC|UN|JG)\s+(?:((?:IDN|IDR|RTR|ETR|BNR|BRC)(?:\s*[A-Z0-9/\-\.]+)?)\s+)?(?:(DIVERSOS)\s+)?(\d{1,3}(?:\.\d{3})*,\d{3})$/;
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+    let token = "";
+    let senhaCatalogo = "";
+    let shaAtual = null;          // versão do .enc no GitHub (exigida pela API para substituir)
+    let payloadNovo = null;       // catálogo extraído dos PDFs, ainda aberto
+    let encNovo = null;           // catálogo novo já criptografado (texto do .enc)
+
+    const $ = id => document.getElementById(id);
+    $("repoNome").textContent = `${REPO_DONO}/${REPO_NOME}`;
+
+    function mostrarMsg(id, tipo, texto) {
+      const el = $(id);
+      el.className = `msg ${tipo}`;
+      el.textContent = texto;
+    }
+
+    function liberarCard(id, liberado) {
+      $(id).classList.toggle("bloqueado", !liberado);
+    }
+
+    // =========================================================================
+    // CRIPTOGRAFIA (formato idêntico ao criptografar_catalogo.py)
+    // =========================================================================
+    function base64ParaBytes(b64) {
+      return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    }
+
+    function bytesParaBase64(bytes) {
+      let bin = "";
+      for (let i = 0; i < bytes.length; i += 0x8000) {
+        bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+      }
+      return btoa(bin);
+    }
+
+    async function derivarChave(senha, salt, iteracoes) {
+      const material = await crypto.subtle.importKey(
+        "raw", new TextEncoder().encode(senha), "PBKDF2", false, ["deriveKey"]
+      );
+      return crypto.subtle.deriveKey(
+        { name: "PBKDF2", hash: "SHA-256", salt, iterations: iteracoes },
+        material,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+    }
+
+    async function descriptografar(enc, senha) {
+      const chave = await derivarChave(senha, base64ParaBytes(enc.salt), enc.iteracoes);
+      const texto = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: base64ParaBytes(enc.iv) }, chave, base64ParaBytes(enc.dados)
+      );
+      return JSON.parse(new TextDecoder().decode(texto));
+    }
+
+    async function criptografar(dados, senha) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const chave = await derivarChave(senha, salt, ITERACOES_PBKDF2);
+      const cifrado = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv }, chave, new TextEncoder().encode(JSON.stringify(dados))
+      );
+      return JSON.stringify({
+        versao: 1,
+        algoritmo: "AES-256-GCM",
+        kdf: "PBKDF2-SHA256",
+        iteracoes: ITERACOES_PBKDF2,
+        salt: bytesParaBase64(salt),
+        iv: bytesParaBase64(iv),
+        dados: bytesParaBase64(new Uint8Array(cifrado))
+      });
+    }
+
+    // =========================================================================
+    // GITHUB API
+    // =========================================================================
+    async function apiGithub(url, opcoes = {}) {
+      const resp = await fetch(url, {
+        ...opcoes,
+        headers: {
+          "Accept": "application/vnd.github+json",
+          "Authorization": `Bearer ${token}`,
+          "X-GitHub-Api-Version": "2022-11-28",
+          ...(opcoes.headers || {})
+        }
+      });
+      if (!resp.ok) {
+        const erro = new Error(`GitHub respondeu ${resp.status}`);
+        erro.status = resp.status;
+        throw erro;
+      }
+      return resp.json();
+    }
+
+    // Busca o .enc publicado (direto do repositório, sem esperar o GitHub Pages)
+    async function buscarEncAtual() {
+      const arq = await apiGithub(`${API_ARQUIVO}?ref=${REPO_BRANCH}&t=${Date.now()}`, { cache: "no-store" });
+      shaAtual = arq.sha;
+      return JSON.parse(atob(arq.content.replace(/\s/g, "")));
+    }
+
+    function explicarErroGithub(err) {
+      if (err.status === 401) return "Token inválido ou expirado. Peça um novo para a dona do repositório.";
+      if (err.status === 403) return "O token não tem permissão de escrita neste repositório (Contents: Read and write).";
+      if (err.status === 404) return `Repositório ou arquivo ${ARQUIVO_ENC} não encontrado (ou o token não tem acesso a ${REPO_DONO}/${REPO_NOME}).`;
+      if (err.status === 409) return "O catálogo foi alterado por outra pessoa enquanto você trabalhava. Recarregue a página e tente de novo.";
+      return `Falha ao falar com o GitHub (${err.message}). Verifique a internet.`;
+    }
+
+    // =========================================================================
+    // PASSO 1: TOKEN
+    // =========================================================================
+    async function conectarToken(valor) {
+      token = valor.trim();
+      if (!token) return;
+      $("btnToken").disabled = true;
+      mostrarMsg("msgToken", "info", "Conectando ao GitHub...");
+      try {
+        await buscarEncAtual();
+        if ($("lembrarToken").checked) {
+          try { localStorage.setItem(TOKEN_KEY, token); } catch (e) {}
+        }
+        $("btnEsquecerToken").style.display = "inline-block";
+        mostrarMsg("msgToken", "ok", `Conectado ao repositório ${REPO_DONO}/${REPO_NOME}.`);
+        liberarCard("cardSenha", true);
+        $("senhaInput").focus();
+      } catch (err) {
+        console.error(err);
+        mostrarMsg("msgToken", "erro", explicarErroGithub(err));
+      } finally {
+        $("btnToken").disabled = false;
+      }
+    }
+
+    $("btnToken").addEventListener("click", () => conectarToken($("tokenInput").value));
+    $("tokenInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") conectarToken($("tokenInput").value);
+    });
+
+    $("btnEsquecerToken").addEventListener("click", () => {
+      try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+      location.reload();
+    });
+
+    // =========================================================================
+    // PASSO 2: SENHA (precisa abrir o catálogo atual)
+    // =========================================================================
+    $("formSenha").addEventListener("submit", async e => {
+      e.preventDefault();
+      const senha = $("senhaInput").value;
+      if (!senha) return;
+      $("btnSenha").disabled = true;
+      mostrarMsg("msgSenha", "info", "Conferindo...");
+      try {
+        const enc = await buscarEncAtual();
+        const atual = await descriptografar(enc, senha).catch(() => null);
+        if (!atual) {
+          mostrarMsg("msgSenha", "erro", "Senha incorreta. Use a mesma senha do catálogo publicado.");
+          return;
+        }
+        senhaCatalogo = senha;
+        mostrarMsg("msgSenha", "ok",
+          `Senha correta. Catálogo atual: ${atual.total_itens} peças (tabela de ${atual.data_tabela || "?"}).`);
+        liberarCard("cardPdfs", true);
+      } catch (err) {
+        console.error(err);
+        mostrarMsg("msgSenha", "erro", explicarErroGithub(err));
+      } finally {
+        $("btnSenha").disabled = false;
+      }
+    });
+
+    // =========================================================================
+    // PASSO 3: EXTRAÇÃO DOS PDFs
+    // =========================================================================
+    function detectarCategoria(nomeArquivo) {
+      const nome = nomeArquivo.toUpperCase();
+      return Object.keys(CATEGORIAS_MAP).find(sigla => nome.includes(sigla)) || null;
+    }
+
+    // Remonta as linhas de texto da página agrupando os pedaços pela altura (Y)
+    async function extrairLinhasPdf(arquivo) {
+      const pdf = await pdfjsLib.getDocument({ data: await arquivo.arrayBuffer() }).promise;
+      const linhas = [];
+      for (let num = 1; num <= pdf.numPages; num++) {
+        const pagina = await pdf.getPage(num);
+        const conteudo = await pagina.getTextContent();
+        const porY = [];
+        for (const item of conteudo.items) {
+          if (!item.str) continue;
+          const y = item.transform[5];
+          let grupo = porY.find(g => Math.abs(g.y - y) <= 2);
+          if (!grupo) {
+            grupo = { y, itens: [] };
+            porY.push(grupo);
+          }
+          grupo.itens.push({ x: item.transform[4], largura: item.width, str: item.str });
+        }
+        // De cima para baixo, e da esquerda para a direita dentro da linha
+        porY.sort((a, b) => b.y - a.y);
+        for (const grupo of porY) {
+          grupo.itens.sort((a, b) => a.x - b.x);
+          let texto = "";
+          let fimAnterior = null;
+          for (const it of grupo.itens) {
+            // Só põe espaço quando há distância visível entre os pedaços (como o pdfplumber)
+            if (fimAnterior !== null && it.x - fimAnterior > 1.5 && !texto.endsWith(" ")) texto += " ";
+            texto += it.str;
+            fimAnterior = it.x + it.largura;
+          }
+          linhas.push(texto.trim());
+        }
+      }
+      return linhas;
+    }
+
+    function formatarBrl(valor) {
+      if (valor <= 0) return "Sob Consulta";
+      const [inteiro, centavos] = valor.toFixed(2).split(".");
+      return `R$ ${inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, ".")},${centavos}`;
+    }
+
+    function agoraFormatado() {
+      const d = new Date();
+      const p = n => String(n).padStart(2, "0");
+      return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+    }
+
+    async function processarPdfs(arquivos) {
+      payloadNovo = null;
+      encNovo = null;
+      liberarCard("cardPublicar", false);
+      $("resumoPdfs").innerHTML = "";
+
+      const pdfs = arquivos.filter(a => a.name.toLowerCase().endsWith(".pdf"))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      if (!pdfs.length) {
+        mostrarMsg("msgPdfs", "erro", "Nenhum arquivo PDF selecionado.");
+        return;
+      }
+
+      const semSigla = pdfs.filter(a => !detectarCategoria(a.name)).map(a => a.name);
+      if (semSigla.length) {
+        mostrarMsg("msgPdfs", "erro", `Renomeie com a sigla da categoria: ${semSigla.join(", ")}`);
+        return;
+      }
+
+      mostrarMsg("msgPdfs", "info", "Lendo os PDFs...");
+      const registros = new Map();   // chave codigo|referencia, a última ocorrência vence (igual ao Python)
+      const resumo = [];
+      let dataTabela = null;
+
+      try {
+        for (const arquivo of pdfs) {
+          const catPadrao = detectarCategoria(arquivo.name);
+          const linhas = await extrairLinhasPdf(arquivo);
+          let cont = 0;
+
+          for (const linha of linhas) {
+            if (!dataTabela) {
+              const mData = linha.match(/(\d{2}\/\d{2}\/\d{4})/);
+              if (mData) dataTabela = mData[1];
+            }
+            if (!/^\d{6}\s+/.test(linha)) continue;
+            const m = linha.match(REGEX_LINHA_PECA);
+            if (!m) continue;
+
+            const [, codigo, nome, undBruta, ref2Bruta, fab, precoStr] = m;
+            let ref2 = (ref2Bruta || "").trim();
+            const primeira = ref2.split(/\s+/)[0];
+            const sigla = ref2 && CATEGORIAS_MAP[primeira] ? primeira : catPadrao;
+            if (!ref2) ref2 = sigla;
+
+            const preco = parseFloat(precoStr.replace(/\./g, "").replace(",", "."));
+            let und = undBruta.replace("..", "").trim();
+            if (und === "UND") und = "UN";
+
+            registros.set(`${codigo}|${ref2}`, {
+              codigo,
+              nome: nome.trim().replace(/\s+/g, " "),
+              unidade: und,
+              categoria: sigla,
+              categoria_nome: CATEGORIAS_MAP[sigla] || "Outros",
+              referencia: ref2,
+              fabricante: (fab || "DIVERSOS").trim(),
+              preco: Math.round(preco * 100) / 100,
+              preco_formatado: formatarBrl(preco),
+              preco_original: precoStr,
+              arquivo_origem: arquivo.name
+            });
+            cont++;
+          }
+          resumo.push({ nome: arquivo.name, categoria: catPadrao, total: cont });
+        }
+      } catch (err) {
+        console.error(err);
+        mostrarMsg("msgPdfs", "erro", `Não foi possível ler os PDFs: ${err.message}`);
+        return;
+      }
+
+      const ordemCat = Object.fromEntries(Object.keys(CATEGORIAS_MAP).map((s, i) => [s, i]));
+      const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+      const pecas = Array.from(registros.values()).sort((a, b) =>
+        ((ordemCat[a.categoria] ?? 99) - (ordemCat[b.categoria] ?? 99)) ||
+        cmp(a.referencia, b.referencia) ||
+        cmp(a.codigo, b.codigo)
+      );
+
+      const algumZerado = resumo.some(r => r.total === 0);
+      $("resumoPdfs").innerHTML = `
+        <table class="resumo">
+          <thead><tr><th>Arquivo</th><th>Categoria</th><th style="text-align:right">Peças</th></tr></thead>
+          <tbody>
+            ${resumo.map(r => `
+              <tr class="${r.total === 0 ? "ruim" : ""}">
+                <td>${r.nome.replace(/</g, "&lt;")}</td>
+                <td>${r.categoria}</td>
+                <td class="num">${r.total}</td>
+              </tr>`).join("")}
+          </tbody>
+        </table>`;
+
+      if (algumZerado) {
+        mostrarMsg("msgPdfs", "erro",
+          "Algum PDF não teve nenhuma peça reconhecida. O formato do relatório pode ter mudado; nada será publicado.");
+        return;
+      }
+
+      // O catálogo é substituído por inteiro: faltar um PDF esvaziaria a categoria no site
+      const faltando = Object.keys(CATEGORIAS_MAP).filter(s => !resumo.some(r => r.categoria === s));
+      if (faltando.length) {
+        mostrarMsg("msgPdfs", "erro",
+          `Faltam os PDFs de: ${faltando.join(", ")}. Envie os 6 PDFs juntos; nada será publicado.`);
+        return;
+      }
+
+      payloadNovo = {
+        empresa: "Auto Elétrica GP",
+        sistema: "Catálogo Rápido de Peças",
+        ultima_atualizacao: agoraFormatado(),
+        data_tabela: dataTabela || agoraFormatado().slice(0, 10),
+        total_itens: pecas.length,
+        categorias: Object.entries(CATEGORIAS_MAP).map(([sigla, nome]) => ({
+          sigla, nome, total: pecas.filter(p => p.categoria === sigla).length
+        })),
+        pecas
+      };
+
+      mostrarMsg("msgPdfs", "ok", `${pecas.length} peças lidas (tabela de ${payloadNovo.data_tabela}).`);
+      $("textoPublicar").textContent =
+        `O catálogo publicado será substituído por estas ${pecas.length} peças.`;
+      liberarCard("cardPublicar", true);
+    }
+
+    $("pdfInput").addEventListener("change", e => processarPdfs(Array.from(e.target.files || [])));
+
+    const dropzone = $("dropzone");
+    dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("arrastando"); });
+    dropzone.addEventListener("dragleave", () => dropzone.classList.remove("arrastando"));
+    dropzone.addEventListener("drop", e => {
+      e.preventDefault();
+      dropzone.classList.remove("arrastando");
+      processarPdfs(Array.from(e.dataTransfer.files || []));
+    });
+
+    // =========================================================================
+    // PASSO 4: PUBLICAR
+    // =========================================================================
+    async function gerarEnc() {
+      if (!encNovo) encNovo = await criptografar(payloadNovo, senhaCatalogo);
+      return encNovo;
+    }
+
+    $("btnPublicar").addEventListener("click", async () => {
+      if (!payloadNovo) return;
+      $("btnPublicar").disabled = true;
+      mostrarMsg("msgPublicar", "info", "Criptografando e enviando...");
+      try {
+        const conteudo = await gerarEnc();
+        await buscarEncAtual();   // pega a versão mais recente para não sobrescrever às cegas
+        const resp = await apiGithub(API_ARQUIVO, {
+          method: "PUT",
+          body: JSON.stringify({
+            message: `Atualiza catálogo: ${payloadNovo.total_itens} peças (tabela ${payloadNovo.data_tabela})`,
+            content: btoa(conteudo),   // o .enc só tem caracteres ASCII
+            sha: shaAtual,
+            branch: REPO_BRANCH
+          })
+        });
+        shaAtual = resp.content.sha;
+        mostrarMsg("msgPublicar", "ok",
+          `Publicado! Em 1 a 2 minutos o site mostra a tabela nova (quem já estiver com ele aberto precisa dar F5).`);
+      } catch (err) {
+        console.error(err);
+        mostrarMsg("msgPublicar", "erro", explicarErroGithub(err));
+      } finally {
+        $("btnPublicar").disabled = false;
+      }
+    });
+
+    // Plano B: baixar o arquivo e subir manualmente pelo GitHub
+    $("btnBaixar").addEventListener("click", async () => {
+      if (!payloadNovo) return;
+      const blob = new Blob([await gerarEnc()], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = ARQUIVO_ENC;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Token lembrado de uma visita anterior
+    try {
+      const salvo = localStorage.getItem(TOKEN_KEY);
+      if (salvo) {
+        $("tokenInput").value = salvo;
+        $("lembrarToken").checked = true;
+        conectarToken(salvo);
+      }
+    } catch (e) {}
+  </script>
+</body>
+</html>
