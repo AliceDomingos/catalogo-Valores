@@ -856,6 +856,42 @@
     }
 
     /* ==========================================================================
+       COMPUTADOR: O GRID OCUPA A ALTURA DA JANELA E AS LINHAS ROLAM POR DENTRO,
+       COM CABEÇALHO DAS COLUNAS E PAGINAÇÃO SEMPRE VISÍVEIS
+       ========================================================================== */
+    @media (min-width: 769px) and (min-height: 560px) {
+      body {
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .main-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .grid-card {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .table-scroll {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+      }
+
+      .grid thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+    }
+
+    /* ==========================================================================
        CELULAR (< 768px): O GRID CONTINUA GRID, COM ROLAGEM LATERAL
        ========================================================================== */
     @media (max-width: 768px) {
@@ -1552,6 +1588,9 @@
       renderizarChips();
       renderizarFiltrosAtivos();
       renderizarCabecalho();
+
+      // Nova página ou novo filtro: volta para a primeira linha
+      document.querySelector(".table-scroll").scrollTop = 0;
 
       const visiveis = colunasVisiveis();
       if (!total) {
