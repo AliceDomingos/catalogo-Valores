@@ -26,6 +26,7 @@
       --borda: #E2E8F0;
       --sombra-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
       --sombra-md: 0 8px 24px -4px rgba(15, 61, 110, 0.08);
+      --sombra-lg: 0 16px 40px -8px rgba(15, 23, 42, 0.18);
       --raio: 12px;
     }
 
@@ -43,6 +44,10 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+    }
+
+    button, input, select {
+      font-family: inherit;
     }
 
     /* CABEÇALHO COM TEMA SUTIL BRASIL (VERDE ESCURO, AZUL MARINHO E DETALHE OURO) */
@@ -71,16 +76,7 @@
       display: flex;
       align-items: center;
       gap: 0.85rem;
-      cursor: pointer;
-      user-select: none;
-      -webkit-user-select: none;
       padding: 0.25rem 0.5rem;
-      border-radius: 8px;
-      transition: background 0.15s ease;
-    }
-
-    .brand-area:active {
-      transform: scale(0.99);
     }
 
     .brand-badge {
@@ -132,6 +128,24 @@
       box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
     }
 
+    .btn-sair {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #FFFFFF;
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-sair:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
     /* ÁREA PRINCIPAL */
     .main-container {
       max-width: 1280px;
@@ -141,40 +155,103 @@
       flex: 1;
     }
 
-    /* PAINEL DE BUSCA E FILTROS */
-    .search-panel {
+    /* CARTÃO DO GRID */
+    .grid-card {
       background: var(--bg-card);
       border: 1px solid var(--borda);
-      border-radius: var(--raio);
-      padding: 1.25rem;
+      border-radius: 16px;
+      padding: 1.4rem;
       box-shadow: var(--sombra-md);
-      margin-bottom: 1.25rem;
     }
 
-    .search-box-wrapper {
-      position: relative;
+    .grid-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .grid-title h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .grid-title p {
+      font-size: 0.85rem;
+      color: var(--texto-secundario);
+    }
+
+    .toolbar {
       display: flex;
       align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
-    .search-icon {
-      position: absolute;
-      left: 1.1rem;
+    .icon-btn {
+      height: 40px;
+      min-width: 40px;
+      padding: 0 0.7rem;
+      border: 1px solid var(--borda);
+      background: #FFFFFF;
+      color: var(--texto-secundario);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .icon-btn:hover:not(:disabled) {
+      border-color: var(--verde-gp);
       color: var(--verde-gp);
-      width: 22px;
-      height: 22px;
+      background: var(--verde-gp-light);
+    }
+
+    .icon-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .search-box {
+      position: relative;
+      width: 320px;
+    }
+
+    .search-box > svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--verde-gp);
       pointer-events: none;
     }
 
     .search-input {
       width: 100%;
-      padding: 1rem 6.5rem 1rem 3.2rem;
-      font-size: 1.08rem;
+      height: 40px;
+      padding: 0 4.2rem 0 2.4rem;
+      font-size: 0.92rem;
       font-weight: 500;
       color: var(--texto-principal);
       background: var(--bg-page);
-      border: 2px solid var(--borda);
-      border-radius: 10px;
+      border: 1.5px solid var(--borda);
+      border-radius: 8px;
       outline: none;
       transition: all 0.2s ease;
     }
@@ -190,22 +267,29 @@
       font-weight: 400;
     }
 
+    .search-input::-webkit-search-cancel-button {
+      display: none;
+    }
+
     .search-actions {
       position: absolute;
-      right: 0.75rem;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.3rem;
     }
 
     .btn-clear {
       background: #E2E8F0;
       color: var(--texto-secundario);
       border: none;
-      border-radius: 6px;
-      padding: 0.35rem 0.65rem;
-      font-size: 0.78rem;
-      font-weight: 600;
+      border-radius: 5px;
+      width: 22px;
+      height: 22px;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
       display: none;
     }
@@ -221,34 +305,26 @@
       color: var(--texto-muted);
       background: #FFFFFF;
       border: 1px solid var(--borda);
-      padding: 0.2rem 0.45rem;
+      padding: 0.05rem 0.4rem;
       border-radius: 5px;
     }
 
     /* FILTROS RÁPIDOS (CHIPS) */
-    .filters-row {
+    .chips-group {
       margin-top: 1rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .chips-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       flex-wrap: wrap;
     }
 
     .chip {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.5rem 0.85rem;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
       border-radius: 999px;
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       font-weight: 600;
       border: 1.5px solid var(--borda);
       background: #FFFFFF;
@@ -268,12 +344,11 @@
       background: var(--verde-gp);
       color: #FFFFFF;
       border-color: var(--verde-gp);
-      box-shadow: 0 3px 10px rgba(11, 93, 59, 0.22);
     }
 
     .chip-count {
-      font-size: 0.73rem;
-      padding: 0.1rem 0.45rem;
+      font-size: 0.7rem;
+      padding: 0.05rem 0.4rem;
       border-radius: 999px;
       background: var(--bg-subtle);
       color: var(--texto-secundario);
@@ -285,109 +360,189 @@
       color: #FFFFFF;
     }
 
-    .toolbar-right {
-      display: flex;
+    /* FILTROS DE COLUNA ATIVOS */
+    .filtros-ativos {
+      margin-top: 0.75rem;
+      display: none;
       align-items: center;
-      gap: 0.75rem;
-      margin-left: auto;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: var(--texto-secundario);
     }
 
-    .sort-select {
-      padding: 0.48rem 0.75rem;
-      border-radius: 8px;
-      border: 1px solid var(--borda);
-      background: #FFFFFF;
-      color: var(--texto-secundario);
-      font-size: 0.84rem;
-      font-weight: 500;
-      outline: none;
+    .filtros-ativos.visivel {
+      display: flex;
+    }
+
+    .tag-filtro {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: var(--azul-gp-light);
+      color: var(--azul-gp);
+      border: 1px solid #BFDBFE;
+      border-radius: 999px;
+      padding: 0.15rem 0.3rem 0.15rem 0.65rem;
+      font-weight: 600;
+    }
+
+    .tag-filtro button {
+      border: none;
+      background: transparent;
+      color: inherit;
       cursor: pointer;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      line-height: 1;
     }
 
-    /* BARRA DE RESULTADOS */
-    .results-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.75rem;
-      padding: 0 0.25rem;
-      font-size: 0.88rem;
-      color: var(--texto-secundario);
+    .tag-filtro button:hover {
+      background: #DBEAFE;
     }
 
-    .results-meta strong {
-      color: var(--verde-gp);
-      font-weight: 700;
+    .link-btn {
+      background: none;
+      border: none;
+      color: var(--azul-gp);
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      text-decoration: underline;
     }
 
-    /* TABELA DESKTOP */
-    .table-wrapper {
-      background: var(--bg-card);
+    /* TABELA (GRID) */
+    .table-scroll {
+      margin-top: 1rem;
       border: 1px solid var(--borda);
-      border-radius: var(--raio);
-      box-shadow: var(--sombra-sm);
-      overflow: hidden;
+      border-radius: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
-    table.catalog-table {
+    table.grid {
       width: 100%;
-      border-collapse: collapse;
+      min-width: 860px;
+      border-collapse: separate;
+      border-spacing: 0;
       text-align: left;
     }
 
-    .catalog-table thead th {
-      background: #F1F5F9;
-      color: var(--azul-gp);
-      font-size: 0.76rem;
+    .grid thead th {
+      background: var(--bg-subtle);
+      color: var(--texto-principal);
+      font-size: 0.82rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 0.85rem 1rem;
-      border-bottom: 2px solid var(--borda);
-    }
-
-    .catalog-table tbody tr {
+      padding: 0.7rem 0.8rem;
       border-bottom: 1px solid var(--borda);
-      transition: background 0.12s ease;
+      white-space: nowrap;
     }
 
-    .catalog-table tbody tr:last-child {
+    .th-inner {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .th-inner.direita {
+      justify-content: flex-end;
+    }
+
+    .th-label.ordenavel {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .th-btn {
+      border: none;
+      background: transparent;
+      color: var(--texto-muted);
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .th-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .th-btn:hover {
+      background: #E2E8F0;
+      color: var(--texto-principal);
+    }
+
+    .th-btn.ativo {
+      color: var(--verde-gp);
+      background: var(--verde-gp-light);
+    }
+
+    .grid tbody td {
+      padding: 0.65rem 0.8rem;
+      border-bottom: 1px solid var(--borda);
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+
+    .grid tbody tr:last-child td {
       border-bottom: none;
     }
 
-    .catalog-table tbody tr:hover {
+    .grid tbody tr:hover td {
       background-color: #F0FDF4;
-    }
-
-    .catalog-table td {
-      padding: 0.85rem 1rem;
-      font-size: 0.92rem;
-      vertical-align: middle;
     }
 
     .col-codigo {
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
       color: var(--azul-gp);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       white-space: nowrap;
     }
 
-    .col-ref {
+    .col-nome {
+      font-weight: 600;
+      min-width: 260px;
+    }
+
+    .col-nowrap {
       white-space: nowrap;
+    }
+
+    .col-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--texto-secundario);
+    }
+
+    .col-direita {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .col-muted {
+      color: var(--texto-secundario);
+      font-size: 0.84rem;
     }
 
     .badge-ref {
       display: inline-flex;
       align-items: center;
-      padding: 0.28rem 0.65rem;
+      padding: 0.22rem 0.6rem;
       border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
       font-weight: 700;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       background: var(--azul-gp-light);
       color: var(--azul-gp);
       border: 1px solid #BFDBFE;
+      white-space: nowrap;
     }
 
     .badge-cat-IDN { background: #ECFDF5; color: #065F46; border-color: #A7F3D0; }
@@ -397,39 +552,14 @@
     .badge-cat-BNR { background: #F5F3FF; color: #5B21B6; border-color: #DDD6FE; }
     .badge-cat-BRC { background: #FFF7ED; color: #9A3412; border-color: #FED7AA; }
 
-    .col-nome {
-      font-weight: 600;
-      color: var(--texto-principal);
-    }
-
-    .sub-info {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--texto-muted);
-      margin-top: 2px;
-    }
-
-    .col-und {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--texto-secundario);
-      text-align: center;
-    }
-
-    .col-preco {
-      text-align: right;
-      white-space: nowrap;
-    }
-
     .price-tag {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 1.06rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--verde-gp);
       background: var(--verde-gp-light);
-      padding: 0.35rem 0.7rem;
-      border-radius: 8px;
+      padding: 0.25rem 0.6rem;
+      border-radius: 7px;
       border: 1px solid #A7F3D0;
       display: inline-block;
     }
@@ -438,14 +568,15 @@
       color: #9A3412;
       background: #FFF7ED;
       border-color: #FED7AA;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
     }
 
     .btn-copy {
       background: transparent;
       border: 1px solid var(--borda);
       color: var(--texto-secundario);
-      padding: 0.4rem 0.65rem;
+      height: 32px;
+      padding: 0 0.6rem;
       border-radius: 7px;
       font-size: 0.78rem;
       font-weight: 600;
@@ -454,6 +585,12 @@
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
+      white-space: nowrap;
+    }
+
+    .btn-copy svg {
+      width: 15px;
+      height: 15px;
     }
 
     .btn-copy:hover {
@@ -465,25 +602,156 @@
     mark.hl {
       background: #FEF08A;
       color: #0F172A;
-      padding: 0 2px;
+      padding: 0 1px;
       border-radius: 3px;
       font-weight: 700;
     }
 
-    /* ESTADO VAZIO */
     .empty-state {
       text-align: center;
-      padding: 3.5rem 1.5rem;
+      padding: 3rem 1.5rem !important;
       color: var(--texto-secundario);
     }
 
     .empty-state h3 {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--texto-principal);
       margin-bottom: 0.35rem;
     }
 
-    /* MODAL SECRETO DE ADMINISTRADOR */
+    /* RODAPÉ COM PAGINAÇÃO */
+    .grid-footer {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.86rem;
+      color: var(--texto-secundario);
+    }
+
+    .por-pagina {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .por-pagina select {
+      height: 38px;
+      padding: 0 0.6rem;
+      border: 1px solid var(--borda);
+      border-radius: 8px;
+      background: #FFFFFF;
+      color: var(--texto-principal);
+      font-size: 0.86rem;
+      cursor: pointer;
+    }
+
+    .pager {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .pager .total {
+      margin-right: 0.5rem;
+    }
+
+    .pager .pagina-info {
+      padding: 0 0.6rem;
+      color: var(--texto-principal);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .pager .icon-btn {
+      height: 36px;
+      min-width: 36px;
+      padding: 0;
+    }
+
+    /* POPOVERS (FILTRO DE COLUNA E ESCOLHA DE COLUNAS) */
+    .popover {
+      position: absolute;
+      z-index: 80;
+      background: #FFFFFF;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      box-shadow: var(--sombra-lg);
+      padding: 0.85rem;
+      width: 250px;
+      display: none;
+    }
+
+    .popover.open {
+      display: block;
+    }
+
+    .popover h4 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--azul-gp);
+      margin-bottom: 0.55rem;
+    }
+
+    .popover .opcao {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.86rem;
+      padding: 0.2rem 0;
+      cursor: pointer;
+    }
+
+    .popover .opcao span.qtd {
+      margin-left: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--texto-muted);
+    }
+
+    .popover .lista-opcoes {
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    .popover input[type="text"],
+    .popover input[type="number"] {
+      width: 100%;
+      height: 36px;
+      padding: 0 0.65rem;
+      border: 1.5px solid var(--borda);
+      border-radius: 7px;
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .popover input:focus {
+      border-color: var(--verde-gp);
+    }
+
+    .popover .faixa {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .popover .faixa label {
+      font-size: 0.75rem;
+      color: var(--texto-secundario);
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .popover .acoes {
+      margin-top: 0.75rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* TELA DE SENHA */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -503,48 +771,27 @@
     .modal-card {
       background: #FFFFFF;
       width: 100%;
-      max-width: 620px;
+      max-width: 440px;
       border-radius: 16px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       border: 1px solid var(--borda);
       overflow: hidden;
-      max-height: 92vh;
-      display: flex;
-      flex-direction: column;
     }
 
     .modal-header {
       background: linear-gradient(135deg, var(--verde-gp) 0%, var(--azul-gp) 100%);
       color: #FFFFFF;
       padding: 1.1rem 1.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       border-bottom: 3px solid var(--ouro-detalhe);
     }
 
     .modal-header h2 {
       font-size: 1.05rem;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .btn-close-modal {
-      background: rgba(255, 255, 255, 0.15);
-      border: none;
-      color: #FFFFFF;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      cursor: pointer;
     }
 
     .modal-body {
       padding: 1.5rem;
-      overflow-y: auto;
     }
 
     .auth-box {
@@ -587,24 +834,6 @@
       cursor: wait;
     }
 
-    .btn-sair {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      color: #FFFFFF;
-      border-radius: 999px;
-      padding: 0.15rem 0.6rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: none;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    .btn-sair:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
     .toast {
       position: fixed;
       bottom: 1.25rem;
@@ -627,117 +856,79 @@
     }
 
     /* ==========================================================================
-       RESPONSIVIDADE MOBILE (< 768px): TABELA VIRA CARDS AUTOMATICAMENTE
+       CELULAR (< 768px): O GRID CONTINUA GRID, COM ROLAGEM LATERAL
        ========================================================================== */
     @media (max-width: 768px) {
       .topbar-container {
         padding: 0.75rem 1rem;
       }
 
+      .status-bar {
+        flex-wrap: wrap;
+      }
+
+      .main-container {
+        padding: 0.75rem;
+      }
+
+      .grid-card {
+        padding: 1rem;
+      }
+
+      .grid-title h2 {
+        font-size: 1.3rem;
+      }
+
+      .toolbar {
+        width: 100%;
+      }
+
+      .search-box {
+        order: -1;
+        width: 100%;
+      }
+
       .kbd-hint {
         display: none;
       }
 
-      .search-input {
-        padding: 0.85rem 3.5rem 0.85rem 2.8rem;
-        font-size: 1rem;
+      .icon-btn .rotulo,
+      .btn-copy .rotulo {
+        display: none;
+      }
+
+      .grid thead th,
+      .grid tbody td {
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
       }
 
       .chips-group {
-        overflow-x: auto;
         flex-wrap: nowrap;
-        width: 100%;
-        padding-bottom: 4px;
-        -webkit-overflow-scrolling: touch;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .chips-group::-webkit-scrollbar {
+        display: none;
       }
 
       .chip {
         flex-shrink: 0;
       }
 
-      .toolbar-right {
+      .grid-footer {
+        justify-content: center;
+      }
+
+      .pager {
+        justify-content: center;
+      }
+
+      .pager .total {
         width: 100%;
-        justify-content: space-between;
-      }
-
-      .sort-select {
-        width: 100%;
-      }
-
-      .table-wrapper {
-        background: transparent;
-        border: none;
-        box-shadow: none;
-      }
-
-      .catalog-table thead {
-        display: none;
-      }
-
-      .catalog-table,
-      .catalog-table tbody,
-      .catalog-table tr,
-      .catalog-table td {
-        display: block;
-        width: 100%;
-      }
-
-      .catalog-table tbody tr {
-        background: var(--bg-card);
-        border: 1px solid var(--borda);
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 0.75rem;
-        box-shadow: var(--sombra-sm);
-        position: relative;
-      }
-
-      .catalog-table td {
-        padding: 0;
-        border: none;
-      }
-
-      .catalog-table td.col-ref {
-        display: inline-block;
-        width: auto;
-        margin-bottom: 0.45rem;
-      }
-
-      .catalog-table td.col-codigo {
-        display: inline-block;
-        width: auto;
-        float: right;
-        background: var(--bg-subtle);
-        padding: 0.2rem 0.55rem;
-        border-radius: 6px;
-        font-size: 0.8rem;
-      }
-
-      .catalog-table td.col-nome {
-        clear: both;
-        font-size: 0.98rem;
-        margin: 0.35rem 0 0.75rem;
-        line-height: 1.35;
-      }
-
-      .catalog-table td.col-und {
-        display: none;
-      }
-
-      .catalog-table td.col-preco {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-top: 1px dashed var(--borda);
-        padding-top: 0.7rem;
-        text-align: left;
-      }
-
-      .catalog-table td.col-acao {
-        position: absolute;
-        bottom: 0.85rem;
-        right: 1rem;
-        width: auto;
+        text-align: center;
+        margin: 0 0 0.25rem;
       }
     }
   </style>
@@ -766,74 +957,77 @@
 
   <!-- CONTEÚDO PRINCIPAL -->
   <main class="main-container">
-    <section class="search-panel">
-      <div class="search-box-wrapper">
-        <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input
-          type="search"
-          id="searchInput"
-          class="search-input"
-          placeholder="Pesquise por nome da peça, aplicação (ex: Titan 12V, Gol G5), código (001694) ou referência (IDN 006)..."
-          autocomplete="off"
-          autofocus
-        />
-        <div class="search-actions">
-          <button type="button" id="btnClear" class="btn-clear">Limpar</button>
-          <span class="kbd-hint" title="Atalho de teclado">/ ou F2</span>
+    <section class="grid-card">
+      <div class="grid-head">
+        <div class="grid-title">
+          <h2>Peças</h2>
+          <p id="infoDataTabela">Tabela de preços</p>
+        </div>
+
+        <div class="toolbar">
+          <button type="button" class="icon-btn" id="btnRecarregar" title="Recarregar o catálogo publicado"></button>
+          <button type="button" class="icon-btn" id="btnExportar" title="Baixar as peças filtradas em planilha (CSV)"></button>
+          <button type="button" class="icon-btn" id="btnColunas" title="Escolher colunas"></button>
+          <div class="search-box">
+            <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="search"
+              id="searchInput"
+              class="search-input"
+              placeholder="Buscar peça ou código..."
+              autocomplete="off"
+              autofocus
+            />
+            <div class="search-actions">
+              <button type="button" id="btnClear" class="btn-clear" title="Limpar busca">✕</button>
+              <span class="kbd-hint" title="Atalho de teclado: / ou F2">/</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="filters-row">
-        <div class="chips-group" id="chipsContainer">
-          <!-- Gerado dinamicamente via JS -->
-        </div>
+      <div class="chips-group" id="chipsContainer"></div>
+      <div class="filtros-ativos" id="filtrosAtivos"></div>
 
-        <div class="toolbar-right">
-          <select id="sortSelect" class="sort-select" aria-label="Ordenar peças">
-            <option value="ref">Ordenar: Referência (Padrão)</option>
-            <option value="preco_asc">Ordenar: Menor Preço</option>
-            <option value="preco_desc">Ordenar: Maior Preço</option>
-            <option value="nome">Ordenar: Nome (A-Z)</option>
-            <option value="codigo">Ordenar: Código Interno</option>
+      <div class="table-scroll">
+        <table class="grid">
+          <thead id="gridHead"></thead>
+          <tbody id="tabelaCorpo"></tbody>
+        </table>
+      </div>
+
+      <div class="grid-footer">
+        <div class="por-pagina">
+          <label for="porPaginaSelect">Registros por página:</label>
+          <select id="porPaginaSelect">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
           </select>
+        </div>
+        <div class="pager">
+          <span class="total" id="totalRegistros">Total: 0 registros</span>
+          <button type="button" class="icon-btn" id="btnPrimeira" title="Primeira página"></button>
+          <button type="button" class="icon-btn" id="btnAnterior" title="Página anterior"></button>
+          <span class="pagina-info" id="paginaInfo">Página 1 de 1</span>
+          <button type="button" class="icon-btn" id="btnProxima" title="Próxima página"></button>
+          <button type="button" class="icon-btn" id="btnUltima" title="Última página"></button>
         </div>
       </div>
     </section>
-
-    <div class="results-meta">
-      <span id="contadorResultados">Exibindo <strong>0</strong> peças</span>
-      <span id="infoDataTabela"></span>
-    </div>
-
-    <div class="table-wrapper">
-      <table class="catalog-table">
-        <thead>
-          <tr>
-            <th style="width: 130px;">Referência</th>
-            <th style="width: 100px;">Código</th>
-            <th>Descrição da Peça (Nome Fantasia)</th>
-            <th style="width: 70px; text-align: center;">Und.</th>
-            <th style="width: 155px; text-align: right;">Preço Varejo</th>
-            <th style="width: 115px; text-align: right;">Orçamento</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaCorpo">
-          <!-- Renderizado em tempo real pelo JS -->
-        </tbody>
-      </table>
-      <div id="emptyState" class="empty-state" style="display: none;">
-        <h3>Nenhuma peça encontrada para essa busca</h3>
-        <p>Tente buscar por termos mais curtos (ex: <strong>914020</strong>, <strong>Titan</strong>, <strong>28 MT</strong>, <strong>IDN 006</strong>).</p>
-      </div>
-    </div>
   </main>
+
+  <!-- POPOVERS -->
+  <div class="popover" id="popFiltro"></div>
+  <div class="popover" id="popColunas"></div>
 
   <!-- TELA DE SENHA: o catálogo (banco_de_dados.enc) só é descriptografado com a senha correta -->
   <div class="modal-backdrop" id="loginModal">
-    <div class="modal-card" style="max-width: 440px;">
+    <div class="modal-card">
       <div class="modal-header">
         <h2>🔒 Catálogo Protegido — Auto Elétrica GP</h2>
       </div>
@@ -863,35 +1057,99 @@
       BNR: "Bobinas",
       BRC: "Bobinas na Carcaça"
     };
+    const ORDEM_CATEGORIAS = Object.fromEntries(Object.keys(CATEGORIAS_MAP).map((s, i) => [s, i]));
 
     // Arquivo gerado pelo criptografar_catalogo.py (o JSON aberto NÃO é publicado)
     const ARQUIVO_CATALOGO = "./banco_de_dados.enc";
     // A senha fica só nesta aba (apagada ao fechar o navegador) para não pedir de novo a cada F5
     const SESSAO_SENHA_KEY = "auto_eletrica_gp_senha";
+    // Preferências de exibição (colunas e registros por página) ficam salvas no navegador
+    const PREFS_KEY = "auto_eletrica_gp_grid_prefs";
+
+    // Ícones (SVG inline, sem dependências externas)
+    const ICONES = {
+      recarregar: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>',
+      exportar: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+      colunas: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="17" x2="20" y2="17"/><circle cx="9" cy="7" r="2.2" fill="#fff"/><circle cx="15" cy="17" r="2.2" fill="#fff"/></svg>',
+      filtro: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="3 4 21 4 14 12.5 14 20 10 18 10 12.5 3 4"/></svg>',
+      ordenar: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="7 9 12 4 17 9"/><polyline points="7 15 12 20 17 15"/></svg>',
+      ordenarAsc: '<svg fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><polyline points="7 11 12 6 17 11"/><line x1="12" y1="6" x2="12" y2="19"/></svg>',
+      ordenarDesc: '<svg fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><polyline points="7 13 12 18 17 13"/><line x1="12" y1="18" x2="12" y2="5"/></svg>',
+      primeira: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>',
+      anterior: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>',
+      proxima: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>',
+      ultima: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>',
+      copiar: '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>'
+    };
+
+    // Colunas do grid. filtro: "texto" (contém), "lista" (marcar valores) ou "faixa" (mín/máx)
+    const COLUNAS = [
+      { id: "acoes", titulo: "Ações", fixa: true },
+      { id: "referencia", titulo: "Referência", filtro: "texto", ordenavel: true },
+      { id: "codigo", titulo: "Código", filtro: "texto", ordenavel: true },
+      { id: "nome", titulo: "Descrição", filtro: "texto", ordenavel: true },
+      { id: "categoria", titulo: "Categoria", filtro: "lista", ordenavel: true },
+      { id: "unidade", titulo: "Und.", filtro: "lista", ordenavel: true },
+      { id: "fabricante", titulo: "Fabricante", filtro: "lista", ordenavel: true },
+      { id: "preco", titulo: "Preço", filtro: "faixa", ordenavel: true, direita: true }
+    ];
+    const COLUNAS_POR_ID = Object.fromEntries(COLUNAS.map(c => [c.id, c]));
 
     let catalogoPecas = [];
-    let categoriaAtiva = "TODAS";
+    let filtradasAtual = [];
     let termoBusca = "";
-    let ordenacaoAtiva = "ref";
+    let ordenacao = { coluna: "referencia", direcao: "asc" };
+    let paginaAtual = 1;
+    let porPagina = 25;
+    let colunasOcultas = new Set(["fabricante"]);   // todas as peças vêm como DIVERSOS
+    const filtros = {
+      referencia: "",
+      codigo: "",
+      nome: "",
+      categoria: new Set(),
+      unidade: new Set(),
+      fabricante: new Set(),
+      preco: { min: null, max: null }
+    };
 
     // Elementos DOM
-    const searchInput = document.getElementById("searchInput");
-    const btnClear = document.getElementById("btnClear");
-    const chipsContainer = document.getElementById("chipsContainer");
-    const sortSelect = document.getElementById("sortSelect");
-    const tabelaCorpo = document.getElementById("tabelaCorpo");
-    const emptyState = document.getElementById("emptyState");
-    const contadorResultados = document.getElementById("contadorResultados");
-    const infoDataTabela = document.getElementById("infoDataTabela");
-    const statusTexto = document.getElementById("statusTexto");
+    const $ = id => document.getElementById(id);
+    const searchInput = $("searchInput");
+    const btnClear = $("btnClear");
+    const chipsContainer = $("chipsContainer");
+    const gridHead = $("gridHead");
+    const tabelaCorpo = $("tabelaCorpo");
+    const infoDataTabela = $("infoDataTabela");
+    const statusTexto = $("statusTexto");
+    const popFiltro = $("popFiltro");
+    const popColunas = $("popColunas");
+
+    // Ícones dos botões fixos
+    $("btnRecarregar").innerHTML = ICONES.recarregar;
+    $("btnExportar").innerHTML = `${ICONES.exportar}<span class="rotulo">Exportar</span>`;
+    $("btnColunas").innerHTML = ICONES.colunas;
+    $("btnPrimeira").innerHTML = ICONES.primeira;
+    $("btnAnterior").innerHTML = ICONES.anterior;
+    $("btnProxima").innerHTML = ICONES.proxima;
+    $("btnUltima").innerHTML = ICONES.ultima;
+
+    // =========================================================================
+    // UTILITÁRIOS
+    // =========================================================================
 
     // Normaliza texto (remove acentos e converte para minúsculas) para busca tolerante
     function normalizarTexto(str) {
       return (str || "")
         .toString()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[̀-ͯ]/g, "")
         .toLowerCase();
+    }
+
+    function escaparHtml(str) {
+      return String(str ?? "").replace(/[&<>"']/g, c => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+      ));
     }
 
     // Formata float para R$
@@ -900,6 +1158,64 @@
       return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     }
 
+    // Destaca os termos pesquisados, ignorando acentos ("alemao" marca "ALEMÃO").
+    // Marca as posições no texto original e só depois monta o HTML, então um termo
+    // nunca casa dentro de uma tag <mark> já inserida.
+    function destacarTermos(texto, tokens) {
+      texto = String(texto ?? "");
+      const uteis = tokens.filter(t => t.length >= 2);
+      if (!uteis.length || !texto) return escaparHtml(texto);
+
+      const chars = Array.from(texto);
+      let normalizado = "";
+      const posOriginal = [];   // posição no texto normalizado -> índice do caractere original
+      chars.forEach((ch, i) => {
+        const n = normalizarTexto(ch);
+        for (let k = 0; k < n.length; k++) posOriginal.push(i);
+        normalizado += n;
+      });
+
+      const marcado = new Array(chars.length).fill(false);
+      for (const tok of uteis) {
+        let pos = normalizado.indexOf(tok);
+        while (pos !== -1) {
+          for (let k = pos; k < pos + tok.length; k++) marcado[posOriginal[k]] = true;
+          pos = normalizado.indexOf(tok, pos + 1);
+        }
+      }
+
+      let html = "";
+      let i = 0;
+      while (i < chars.length) {
+        let j = i;
+        while (j < chars.length && marcado[j] === marcado[i]) j++;
+        const trecho = escaparHtml(chars.slice(i, j).join(""));
+        html += marcado[i] ? `<mark class="hl">${trecho}</mark>` : trecho;
+        i = j;
+      }
+      return html;
+    }
+
+    function carregarPrefs() {
+      try {
+        const prefs = JSON.parse(localStorage.getItem(PREFS_KEY) || "{}");
+        if (Array.isArray(prefs.colunasOcultas)) {
+          colunasOcultas = new Set(prefs.colunasOcultas.filter(id => COLUNAS_POR_ID[id] && !COLUNAS_POR_ID[id].fixa));
+        }
+        if ([10, 25, 50, 100].includes(prefs.porPagina)) porPagina = prefs.porPagina;
+      } catch (e) {}
+      $("porPaginaSelect").value = String(porPagina);
+    }
+
+    function salvarPrefs() {
+      try {
+        localStorage.setItem(PREFS_KEY, JSON.stringify({ colunasOcultas: [...colunasOcultas], porPagina }));
+      } catch (e) {}
+    }
+
+    // =========================================================================
+    // CARREGAMENTO E DESCRIPTOGRAFIA
+    // =========================================================================
     function base64ParaBytes(b64) {
       return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
     }
@@ -929,7 +1245,7 @@
 
     async function carregarArquivoCriptografado() {
       if (catalogoCriptografado) return catalogoCriptografado;
-      const resp = await fetch(`${ARQUIVO_CATALOGO}?t=${Date.now()}`);
+      const resp = await fetch(`${ARQUIVO_CATALOGO}?t=${Date.now()}`, { cache: "no-store" });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       catalogoCriptografado = await resp.json();
       return catalogoCriptografado;
@@ -970,157 +1286,519 @@
       abrirLogin();
     }
 
+    // Busca de novo o arquivo publicado (útil logo depois de uma atualização de preços)
+    async function recarregarCatalogo() {
+      let senha = null;
+      try { senha = sessionStorage.getItem(SESSAO_SENHA_KEY); } catch (e) {}
+      catalogoCriptografado = null;
+      if (!senha) {
+        abrirLogin();
+        return;
+      }
+      const btn = $("btnRecarregar");
+      btn.disabled = true;
+      try {
+        if (await desbloquearCatalogo(senha)) {
+          mostrarToast("Catálogo recarregado!");
+        } else {
+          try { sessionStorage.removeItem(SESSAO_SENHA_KEY); } catch (e) {}
+          abrirLogin();
+        }
+      } catch (err) {
+        console.error(err);
+        mostrarToast("Não foi possível recarregar. Verifique a internet.");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
     function aplicarDadosCatalogo(dados) {
       catalogoPecas = (dados.pecas || []).map(p => ({
         ...p,
-        _busca: normalizarTexto(`${p.codigo} ${p.referencia} ${p.nome} ${p.categoria} ${p.categoria_nome}`)
+        _busca: normalizarTexto(`${p.codigo} ${p.referencia} ${p.nome} ${p.categoria} ${p.categoria_nome}`),
+        _nomeNorm: normalizarTexto(p.nome),
+        _refNorm: normalizarTexto(p.referencia),
+        _codigoNorm: normalizarTexto(p.codigo)
       }));
 
       statusTexto.textContent = `${catalogoPecas.length.toLocaleString("pt-BR")} peças ativas`;
       infoDataTabela.textContent = dados.data_tabela
         ? `Tabela ref.: ${dados.data_tabela} • Atualizado: ${dados.ultima_atualizacao || "Hoje"}`
-        : "";
-      document.getElementById("btnSair").style.display = "inline-block";
-      document.getElementById("btnAtualizar").style.display = "inline-block";
+        : "Tabela de preços";
+      $("btnSair").style.display = "inline-block";
+      $("btnAtualizar").style.display = "inline-block";
 
-      renderizarChips();
       atualizarLista();
     }
 
-    // Renderiza os botões estilo "Chips" das categorias
+    // =========================================================================
+    // FILTROS
+    // =========================================================================
+    function filtroAtivo(id) {
+      const f = filtros[id];
+      if (f instanceof Set) return f.size > 0;
+      if (id === "preco") return f.min !== null || f.max !== null;
+      return f.trim() !== "";
+    }
+
+    function passaFiltrosDeColuna(p) {
+      const txt = (valor, filtro) => !filtro.trim() || valor.includes(normalizarTexto(filtro.trim()));
+      if (!txt(p._refNorm, filtros.referencia)) return false;
+      if (!txt(p._codigoNorm, filtros.codigo)) return false;
+      if (filtros.nome.trim()) {
+        const partes = normalizarTexto(filtros.nome).split(/\s+/).filter(Boolean);
+        if (!partes.every(t => p._nomeNorm.includes(t))) return false;
+      }
+      if (filtros.categoria.size && !filtros.categoria.has(p.categoria)) return false;
+      if (filtros.unidade.size && !filtros.unidade.has(p.unidade)) return false;
+      if (filtros.fabricante.size && !filtros.fabricante.has(p.fabricante || "DIVERSOS")) return false;
+      const { min, max } = filtros.preco;
+      if (min !== null && !(p.preco >= min)) return false;
+      if (max !== null && !(p.preco > 0 && p.preco <= max)) return false;
+      return true;
+    }
+
+    function descreverFiltro(id) {
+      const f = filtros[id];
+      const titulo = COLUNAS_POR_ID[id].titulo;
+      if (f instanceof Set) return `${titulo}: ${[...f].join(", ")}`;
+      if (id === "preco") {
+        const fmt = v => formatarMoeda(v);
+        if (f.min !== null && f.max !== null) return `Preço: ${fmt(f.min)} a ${fmt(f.max)}`;
+        if (f.min !== null) return `Preço: a partir de ${fmt(f.min)}`;
+        return `Preço: até ${fmt(f.max)}`;
+      }
+      return `${titulo}: "${f.trim()}"`;
+    }
+
+    function limparFiltro(id) {
+      const f = filtros[id];
+      if (f instanceof Set) f.clear();
+      else if (id === "preco") filtros.preco = { min: null, max: null };
+      else filtros[id] = "";
+    }
+
+    function renderizarFiltrosAtivos() {
+      const ativos = COLUNAS.filter(c => c.filtro && c.id !== "categoria" && filtroAtivo(c.id));
+      const el = $("filtrosAtivos");
+      el.classList.toggle("visivel", ativos.length > 0);
+      if (!ativos.length) {
+        el.innerHTML = "";
+        return;
+      }
+      el.innerHTML = "Filtros:" + ativos.map(c => `
+        <span class="tag-filtro">${escaparHtml(descreverFiltro(c.id))}
+          <button type="button" data-limpar="${c.id}" title="Remover filtro">✕</button>
+        </span>`).join("") +
+        ` <button type="button" class="link-btn" data-limpar="__todos">Limpar filtros</button>`;
+    }
+
+    $("filtrosAtivos").addEventListener("click", e => {
+      const btn = e.target.closest("[data-limpar]");
+      if (!btn) return;
+      const id = btn.dataset.limpar;
+      if (id === "__todos") {
+        COLUNAS.filter(c => c.filtro && c.id !== "categoria").forEach(c => limparFiltro(c.id));
+      } else {
+        limparFiltro(id);
+      }
+      fecharPopovers();
+      paginaAtual = 1;
+      atualizarLista();
+    });
+
+    // Chips de categoria: atalho para o filtro da coluna Categoria
     function renderizarChips() {
-      const contagens = { TODAS: catalogoPecas.length };
-      Object.keys(CATEGORIAS_MAP).forEach(sigla => (contagens[sigla] = 0));
-      catalogoPecas.forEach(p => {
-        if (contagens[p.categoria] !== undefined) contagens[p.categoria]++;
-      });
+      const contagens = {};
+      catalogoPecas.forEach(p => (contagens[p.categoria] = (contagens[p.categoria] || 0) + 1));
+      const sel = filtros.categoria;
 
       let html = `
-        <button type="button" class="chip ${categoriaAtiva === "TODAS" ? "active" : ""}" data-cat="TODAS">
-          Todas <span class="chip-count">${contagens.TODAS}</span>
-        </button>
-      `;
-
+        <button type="button" class="chip ${sel.size === 0 ? "active" : ""}" data-cat="TODAS">
+          Todas <span class="chip-count">${catalogoPecas.length}</span>
+        </button>`;
       for (const [sigla, nome] of Object.entries(CATEGORIAS_MAP)) {
-        const ativo = categoriaAtiva === sigla ? "active" : "";
+        const ativo = sel.size === 1 && sel.has(sigla) ? "active" : "";
         html += `
           <button type="button" class="chip ${ativo}" data-cat="${sigla}" title="${nome}">
             ${sigla} · ${nome} <span class="chip-count">${contagens[sigla] || 0}</span>
-          </button>
-        `;
+          </button>`;
       }
-
       chipsContainer.innerHTML = html;
+    }
 
-      chipsContainer.querySelectorAll(".chip").forEach(btn => {
-        btn.addEventListener("click", () => {
-          categoriaAtiva = btn.getAttribute("data-cat");
-          renderizarChips();
-          atualizarLista();
-        });
+    chipsContainer.addEventListener("click", e => {
+      const chip = e.target.closest(".chip");
+      if (!chip) return;
+      filtros.categoria.clear();
+      if (chip.dataset.cat !== "TODAS") filtros.categoria.add(chip.dataset.cat);
+      fecharPopovers();
+      paginaAtual = 1;
+      atualizarLista();
+    });
+
+    // =========================================================================
+    // ORDENAÇÃO
+    // =========================================================================
+    function comparar(a, b, coluna) {
+      switch (coluna) {
+        case "preco": {
+          // "Sob Consulta" (preço 0) sempre no fim, em qualquer direção
+          if (!(a.preco > 0) || !(b.preco > 0)) return 0;
+          return a.preco - b.preco;
+        }
+        case "categoria":
+          return (ORDEM_CATEGORIAS[a.categoria] ?? 99) - (ORDEM_CATEGORIAS[b.categoria] ?? 99);
+        case "codigo":
+          return a.codigo.localeCompare(b.codigo);
+        case "nome":
+          return a.nome.localeCompare(b.nome, "pt-BR");
+        case "unidade":
+          return a.unidade.localeCompare(b.unidade);
+        case "fabricante":
+          return (a.fabricante || "").localeCompare(b.fabricante || "");
+        default:
+          return a.referencia.localeCompare(b.referencia, "pt-BR", { numeric: true });
+      }
+    }
+
+    function ordenarLista(lista) {
+      const { coluna, direcao } = ordenacao;
+      const sinal = direcao === "asc" ? 1 : -1;
+      return lista.sort((a, b) => {
+        if (coluna === "preco") {
+          const semA = !(a.preco > 0), semB = !(b.preco > 0);
+          if (semA !== semB) return semA ? 1 : -1;
+        }
+        return sinal * comparar(a, b, coluna) ||
+          a.referencia.localeCompare(b.referencia, "pt-BR", { numeric: true });
       });
     }
 
-    // Destaca os termos pesquisados no texto
-    function destacarTermos(texto, tokens) {
-      if (!tokens.length || !texto) return texto;
-      let resultado = texto;
-      tokens.forEach(tok => {
-        if (tok.length < 2) return;
-        const escapado = tok.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        const regex = new RegExp(`(${escapado})`, "gi");
-        resultado = resultado.replace(regex, '<mark class="hl">$1</mark>');
-      });
-      return resultado;
+    function alternarOrdenacao(coluna) {
+      if (ordenacao.coluna === coluna) {
+        ordenacao.direcao = ordenacao.direcao === "asc" ? "desc" : "asc";
+      } else {
+        ordenacao = { coluna, direcao: "asc" };
+      }
+      paginaAtual = 1;
+      atualizarLista();
     }
 
-    // Filtra, ordena e desenha a tabela/cards em tempo real
+    // =========================================================================
+    // RENDERIZAÇÃO DO GRID
+    // =========================================================================
+    function colunasVisiveis() {
+      return COLUNAS.filter(c => !colunasOcultas.has(c.id));
+    }
+
+    function renderizarCabecalho() {
+      gridHead.innerHTML = "<tr>" + colunasVisiveis().map(c => {
+        let botoes = "";
+        if (c.ordenavel) {
+          const ativa = ordenacao.coluna === c.id;
+          const icone = !ativa ? ICONES.ordenar : ordenacao.direcao === "asc" ? ICONES.ordenarAsc : ICONES.ordenarDesc;
+          const dica = ativa && ordenacao.direcao === "asc" ? "Ordenar decrescente" : "Ordenar crescente";
+          botoes += `<button type="button" class="th-btn ${ativa ? "ativo" : ""}" data-ordenar="${c.id}" title="${dica}">${icone}</button>`;
+        }
+        if (c.filtro) {
+          botoes += `<button type="button" class="th-btn ${filtroAtivo(c.id) ? "ativo" : ""}" data-filtrar="${c.id}" title="Filtrar ${c.titulo}">${ICONES.filtro}</button>`;
+        }
+        const label = `<span class="th-label ${c.ordenavel ? "ordenavel" : ""}" ${c.ordenavel ? `data-ordenar="${c.id}"` : ""}>${c.titulo}</span>`;
+        return `<th><div class="th-inner ${c.direita ? "direita" : ""}">${label}${botoes}</div></th>`;
+      }).join("") + "</tr>";
+    }
+
+    function renderizarCelula(c, p, tokens, indice) {
+      switch (c.id) {
+        case "acoes":
+          return `<td><button type="button" class="btn-copy" data-copiar="${indice}" title="Copiar para orçamento (WhatsApp)">${ICONES.copiar}<span class="rotulo">Copiar</span></button></td>`;
+        case "referencia":
+          return `<td><span class="badge-ref badge-cat-${escaparHtml(p.categoria)}">${destacarTermos(p.referencia, tokens)}</span></td>`;
+        case "codigo":
+          return `<td class="col-codigo">${destacarTermos(p.codigo, tokens)}</td>`;
+        case "nome":
+          return `<td class="col-nome">${destacarTermos(p.nome, tokens)}</td>`;
+        case "categoria":
+          return `<td class="col-muted col-nowrap">${escaparHtml(p.categoria_nome)}</td>`;
+        case "unidade":
+          return `<td class="col-mono">${escaparHtml(p.unidade)}</td>`;
+        case "fabricante":
+          return `<td class="col-muted">${escaparHtml(p.fabricante || "DIVERSOS")}</td>`;
+        case "preco": {
+          const classe = p.preco > 0 ? "price-tag" : "price-tag consulta";
+          return `<td class="col-direita"><span class="${classe}">${formatarMoeda(p.preco)}</span></td>`;
+        }
+        default:
+          return "<td></td>";
+      }
+    }
+
+    // Filtra, ordena, pagina e desenha o grid
     function atualizarLista() {
-      const buscaNorm = normalizarTexto(termoBusca.trim());
-      const tokens = buscaNorm.split(/\s+/).filter(Boolean);
-
+      const tokens = normalizarTexto(termoBusca.trim()).split(/\s+/).filter(Boolean);
       btnClear.style.display = termoBusca.length > 0 ? "inline-block" : "none";
 
-      let filtradas = catalogoPecas.filter(p => {
-        if (categoriaAtiva !== "TODAS" && p.categoria !== categoriaAtiva) return false;
-        if (!tokens.length) return true;
-        return tokens.every(t => p._busca.includes(t));
-      });
+      filtradasAtual = ordenarLista(catalogoPecas.filter(p =>
+        passaFiltrosDeColuna(p) && tokens.every(t => p._busca.includes(t))
+      ));
 
-      // Ordenação
-      filtradas.sort((a, b) => {
-        if (ordenacaoAtiva === "preco_asc") {
-          const pa = a.preco > 0 ? a.preco : 999999;
-          const pb = b.preco > 0 ? b.preco : 999999;
-          return pa - pb;
-        }
-        if (ordenacaoAtiva === "preco_desc") return (b.preco || 0) - (a.preco || 0);
-        if (ordenacaoAtiva === "nome") return a.nome.localeCompare(b.nome, "pt-BR");
-        if (ordenacaoAtiva === "codigo") return a.codigo.localeCompare(b.codigo);
-        return a.referencia.localeCompare(b.referencia, "pt-BR", { numeric: true });
-      });
+      const total = filtradasAtual.length;
+      const totalPaginas = Math.max(1, Math.ceil(total / porPagina));
+      paginaAtual = Math.min(Math.max(1, paginaAtual), totalPaginas);
+      const inicio = (paginaAtual - 1) * porPagina;
+      const pagina = filtradasAtual.slice(inicio, inicio + porPagina);
 
-      contadorResultados.innerHTML = `Exibindo <strong>${filtradas.length.toLocaleString("pt-BR")}</strong> de ${catalogoPecas.length.toLocaleString("pt-BR")} peças`;
+      renderizarChips();
+      renderizarFiltrosAtivos();
+      renderizarCabecalho();
 
-      if (filtradas.length === 0) {
-        tabelaCorpo.innerHTML = "";
-        emptyState.style.display = "block";
-        return;
+      const visiveis = colunasVisiveis();
+      if (!total) {
+        tabelaCorpo.innerHTML = `
+          <tr><td class="empty-state" colspan="${visiveis.length}">
+            <h3>Nenhuma peça encontrada</h3>
+            <p>Tente termos mais curtos (ex: <strong>914020</strong>, <strong>Titan</strong>, <strong>IDN 006</strong>) ou remova os filtros.</p>
+          </td></tr>`;
+      } else {
+        tabelaCorpo.innerHTML = pagina.map((p, i) =>
+          `<tr>${visiveis.map(c => renderizarCelula(c, p, tokens, inicio + i)).join("")}</tr>`
+        ).join("");
       }
 
-      emptyState.style.display = "none";
-
-      const linhasHtml = filtradas.map(p => {
-        const codigoHl = destacarTermos(p.codigo, tokens);
-        const refHl = destacarTermos(p.referencia, tokens);
-        const nomeHl = destacarTermos(p.nome, tokens);
-        const precoTexto = p.preco > 0 ? formatarMoeda(p.preco) : "Sob Consulta";
-        const classePreco = p.preco > 0 ? "price-tag" : "price-tag consulta";
-        const textoOrcamento = `*${p.codigo}* - ${p.nome} (Ref: ${p.referencia}) — *${precoTexto}*`;
-
-        return `
-          <tr>
-            <td class="col-ref">
-              <span class="badge-ref badge-cat-${p.categoria}">${refHl}</span>
-            </td>
-            <td class="col-codigo">#${codigoHl}</td>
-            <td class="col-nome">
-              ${nomeHl}
-              <span class="sub-info">${p.categoria_nome} • Fabricante: ${p.fabricante || "DIVERSOS"}</span>
-            </td>
-            <td class="col-und">${p.unidade}</td>
-            <td class="col-preco">
-              <span class="${classePreco}">${precoTexto}</span>
-            </td>
-            <td class="col-acao" style="text-align: right;">
-              <button type="button" class="btn-copy" onclick="copiarOrcamento('${textoOrcamento.replace(/'/g, "\\'")}')">
-                📋 Copiar
-              </button>
-            </td>
-          </tr>
-        `;
-      });
-
-      tabelaCorpo.innerHTML = linhasHtml.join("");
+      $("totalRegistros").textContent = `Total: ${total.toLocaleString("pt-BR")} ${total === 1 ? "registro" : "registros"}`;
+      $("paginaInfo").textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+      $("btnPrimeira").disabled = $("btnAnterior").disabled = paginaAtual <= 1;
+      $("btnProxima").disabled = $("btnUltima").disabled = paginaAtual >= totalPaginas;
     }
+
+    function irParaPagina(n) {
+      paginaAtual = n;
+      atualizarLista();
+      document.querySelector(".table-scroll").scrollIntoView({ block: "nearest" });
+    }
+
+    $("btnPrimeira").addEventListener("click", () => irParaPagina(1));
+    $("btnAnterior").addEventListener("click", () => irParaPagina(paginaAtual - 1));
+    $("btnProxima").addEventListener("click", () => irParaPagina(paginaAtual + 1));
+    $("btnUltima").addEventListener("click", () => irParaPagina(Infinity));
+
+    $("porPaginaSelect").addEventListener("change", e => {
+      porPagina = Number(e.target.value);
+      paginaAtual = 1;
+      salvarPrefs();
+      atualizarLista();
+    });
+
+    gridHead.addEventListener("click", e => {
+      const ord = e.target.closest("[data-ordenar]");
+      if (ord) {
+        alternarOrdenacao(ord.dataset.ordenar);
+        return;
+      }
+      const filt = e.target.closest("[data-filtrar]");
+      if (filt) abrirPopoverFiltro(filt.dataset.filtrar, filt);
+    });
 
     // Copiar item para WhatsApp / Orçamento
-    window.copiarOrcamento = function(texto) {
-      navigator.clipboard.writeText(texto).then(() => {
-        mostrarToast("Peça copiada para o orçamento!");
-      });
-    };
+    tabelaCorpo.addEventListener("click", e => {
+      const btn = e.target.closest("[data-copiar]");
+      if (!btn) return;
+      const p = filtradasAtual[Number(btn.dataset.copiar)];
+      if (!p) return;
+      const texto = `*${p.codigo}* - ${p.nome} (Ref: ${p.referencia}) — *${formatarMoeda(p.preco)}*`;
+      navigator.clipboard.writeText(texto).then(
+        () => mostrarToast("Peça copiada para o orçamento!"),
+        () => mostrarToast("Não foi possível copiar.")
+      );
+    });
 
     function mostrarToast(msg) {
-      const toast = document.getElementById("toast");
+      const toast = $("toast");
       toast.textContent = msg;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2600);
+      clearTimeout(mostrarToast.timer);
+      mostrarToast.timer = setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
-    // Eventos de Busca e Teclado
+    // =========================================================================
+    // POPOVERS
+    // =========================================================================
+    let popoverAncora = null;
+
+    function posicionarPopover(pop, ancora) {
+      pop.classList.add("open");
+      const r = ancora.getBoundingClientRect();
+      const largura = pop.offsetWidth;
+      const esquerda = Math.max(8, Math.min(r.left, window.innerWidth - largura - 8));
+      pop.style.left = `${esquerda + window.scrollX}px`;
+      pop.style.top = `${r.bottom + window.scrollY + 6}px`;
+      popoverAncora = ancora;
+    }
+
+    function fecharPopovers() {
+      popFiltro.classList.remove("open");
+      popColunas.classList.remove("open");
+      popoverAncora = null;
+    }
+
+    function opcoesDaLista(id) {
+      const contagem = new Map();
+      catalogoPecas.forEach(p => {
+        const v = id === "fabricante" ? (p.fabricante || "DIVERSOS") : p[id];
+        contagem.set(v, (contagem.get(v) || 0) + 1);
+      });
+      const valores = [...contagem.keys()];
+      if (id === "categoria") valores.sort((a, b) => (ORDEM_CATEGORIAS[a] ?? 99) - (ORDEM_CATEGORIAS[b] ?? 99));
+      else valores.sort();
+      return valores.map(v => ({
+        valor: v,
+        rotulo: id === "categoria" ? `${v} · ${CATEGORIAS_MAP[v] || "Outros"}` : v,
+        qtd: contagem.get(v)
+      }));
+    }
+
+    function abrirPopoverFiltro(id, ancora) {
+      if (popFiltro.classList.contains("open") && popFiltro.dataset.coluna === id) {
+        fecharPopovers();
+        return;
+      }
+      fecharPopovers();
+      const col = COLUNAS_POR_ID[id];
+      popFiltro.dataset.coluna = id;
+
+      let corpo = "";
+      if (col.filtro === "texto") {
+        corpo = `<input type="text" data-campo="texto" placeholder="Contém..." value="${escaparHtml(filtros[id])}" />`;
+      } else if (col.filtro === "lista") {
+        corpo = `<div class="lista-opcoes">${opcoesDaLista(id).map(o => `
+          <label class="opcao">
+            <input type="checkbox" data-campo="lista" value="${escaparHtml(o.valor)}" ${filtros[id].has(o.valor) ? "checked" : ""} />
+            ${escaparHtml(o.rotulo)} <span class="qtd">${o.qtd}</span>
+          </label>`).join("")}</div>`;
+      } else if (col.filtro === "faixa") {
+        const { min, max } = filtros.preco;
+        corpo = `
+          <div class="faixa">
+            <label>Mínimo (R$)<input type="number" data-campo="min" min="0" step="1" value="${min ?? ""}" /></label>
+            <label>Máximo (R$)<input type="number" data-campo="max" min="0" step="1" value="${max ?? ""}" /></label>
+          </div>`;
+      }
+
+      popFiltro.innerHTML = `
+        <h4>Filtrar ${col.titulo}</h4>
+        ${corpo}
+        <div class="acoes"><button type="button" class="link-btn" data-acao="limpar">Limpar</button></div>`;
+      posicionarPopover(popFiltro, ancora);
+      const primeiro = popFiltro.querySelector('input[type="text"], input[type="number"]');
+      if (primeiro) primeiro.focus();
+    }
+
+    // Filtros aplicados enquanto a pessoa digita/marca
+    popFiltro.addEventListener("input", e => {
+      const id = popFiltro.dataset.coluna;
+      const campo = e.target.dataset.campo;
+      if (campo === "texto") {
+        filtros[id] = e.target.value;
+      } else if (campo === "lista") {
+        if (e.target.checked) filtros[id].add(e.target.value);
+        else filtros[id].delete(e.target.value);
+      } else if (campo === "min" || campo === "max") {
+        const v = e.target.value === "" ? null : Number(e.target.value);
+        filtros.preco[campo] = Number.isFinite(v) ? v : null;
+      }
+      paginaAtual = 1;
+      atualizarLista();
+    });
+
+    popFiltro.addEventListener("click", e => {
+      if (e.target.dataset.acao !== "limpar") return;
+      const id = popFiltro.dataset.coluna;
+      limparFiltro(id);
+      popFiltro.querySelectorAll("input").forEach(inp => {
+        if (inp.type === "checkbox") inp.checked = false;
+        else inp.value = "";
+      });
+      paginaAtual = 1;
+      atualizarLista();
+    });
+
+    // Escolha de colunas visíveis
+    $("btnColunas").addEventListener("click", e => {
+      if (popColunas.classList.contains("open")) {
+        fecharPopovers();
+        return;
+      }
+      fecharPopovers();
+      popColunas.innerHTML = `<h4>Colunas</h4>` + COLUNAS.filter(c => !c.fixa).map(c => `
+        <label class="opcao">
+          <input type="checkbox" value="${c.id}" ${colunasOcultas.has(c.id) ? "" : "checked"} /> ${c.titulo}
+        </label>`).join("");
+      posicionarPopover(popColunas, e.currentTarget);
+    });
+
+    popColunas.addEventListener("change", e => {
+      const id = e.target.value;
+      if (e.target.checked) {
+        colunasOcultas.delete(id);
+      } else {
+        // Pelo menos uma coluna de dados precisa continuar visível
+        const restantes = COLUNAS.filter(c => !c.fixa && !colunasOcultas.has(c.id) && c.id !== id);
+        if (!restantes.length) {
+          e.target.checked = true;
+          return;
+        }
+        colunasOcultas.add(id);
+        // Coluna escondida não pode continuar filtrando sem a pessoa ver
+        limparFiltro(id);
+      }
+      salvarPrefs();
+      atualizarLista();
+    });
+
+    // Fecha os popovers ao clicar fora
+    document.addEventListener("mousedown", e => {
+      if (!popoverAncora) return;
+      if (e.target.closest(".popover") || e.target.closest("[data-filtrar]") || e.target.closest("#btnColunas")) return;
+      fecharPopovers();
+    });
+    window.addEventListener("resize", fecharPopovers);
+
+    // =========================================================================
+    // EXPORTAR (CSV QUE ABRE NO EXCEL)
+    // =========================================================================
+    $("btnExportar").addEventListener("click", () => {
+      if (!filtradasAtual.length) {
+        mostrarToast("Nenhuma peça para exportar.");
+        return;
+      }
+      const cel = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+      const linhas = [["Referência", "Código", "Descrição", "Categoria", "Und.", "Fabricante", "Preço"].map(cel).join(";")];
+      filtradasAtual.forEach(p => {
+        linhas.push([
+          p.referencia, p.codigo, p.nome, p.categoria_nome, p.unidade, p.fabricante || "DIVERSOS",
+          p.preco > 0 ? p.preco.toFixed(2).replace(".", ",") : "Sob Consulta"
+        ].map(cel).join(";"));
+      });
+      // BOM + ";" para o Excel em português abrir com acentos e colunas certas
+      const blob = new Blob(["﻿" + linhas.join("\r\n")], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `catalogo-gp-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      mostrarToast(`${filtradasAtual.length} peças exportadas.`);
+    });
+
+    $("btnRecarregar").addEventListener("click", recarregarCatalogo);
+
+    // =========================================================================
+    // BUSCA E TECLADO
+    // =========================================================================
     searchInput.addEventListener("input", e => {
       termoBusca = e.target.value;
+      paginaAtual = 1;
       atualizarLista();
     });
 
@@ -1128,34 +1806,33 @@
       termoBusca = "";
       searchInput.value = "";
       searchInput.focus();
-      atualizarLista();
-    });
-
-    sortSelect.addEventListener("change", e => {
-      ordenacaoAtiva = e.target.value;
+      paginaAtual = 1;
       atualizarLista();
     });
 
     document.addEventListener("keydown", e => {
       // Com a tela de senha aberta, "/" precisa poder ser digitado na senha
-      if (document.getElementById("loginModal").classList.contains("open")) return;
-      if ((e.key === "/" || e.key === "F2") && document.activeElement !== searchInput) {
+      if (loginModal.classList.contains("open")) return;
+      const digitando = e.target.closest && e.target.closest("input, select, textarea");
+      if (e.key === "Escape") {
+        if (popoverAncora) fecharPopovers();
+        else if (termoBusca) btnClear.click();
+      } else if ((e.key === "/" && !digitando) || e.key === "F2") {
         e.preventDefault();
+        fecharPopovers();
         searchInput.focus();
         searchInput.select();
-      } else if (e.key === "Escape" && termoBusca) {
-        btnClear.click();
       }
     });
 
     // =========================================================================
     // TELA DE SENHA (DESBLOQUEIO DO CATÁLOGO CRIPTOGRAFADO)
     // =========================================================================
-    const loginModal = document.getElementById("loginModal");
-    const loginForm = document.getElementById("loginForm");
-    const loginPassInput = document.getElementById("loginPassInput");
-    const loginError = document.getElementById("loginError");
-    const btnLogin = document.getElementById("btnLogin");
+    const loginModal = $("loginModal");
+    const loginForm = $("loginForm");
+    const loginPassInput = $("loginPassInput");
+    const loginError = $("loginError");
+    const btnLogin = $("btnLogin");
 
     function abrirLogin() {
       loginModal.classList.add("open");
@@ -1197,12 +1874,14 @@
     });
 
     // Bloqueia de novo (útil em computador compartilhado)
-    document.getElementById("btnSair").addEventListener("click", () => {
+    $("btnSair").addEventListener("click", () => {
       try { sessionStorage.removeItem(SESSAO_SENHA_KEY); } catch (e) {}
       location.reload();
     });
 
     // Inicializa ao abrir a página
+    carregarPrefs();
+    atualizarLista();
     inicializarCatalogo();
   </script>
 </body>
