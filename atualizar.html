@@ -75,6 +75,20 @@
     .topbar h1 { font-size: 1.2rem; font-weight: 800; line-height: 1.15; }
     .topbar span { font-size: 0.78rem; color: #CBD5E1; font-weight: 500; display: block; }
 
+    .link-voltar {
+      margin-left: auto;
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      padding: 0.3rem 0.75rem;
+      white-space: nowrap;
+    }
+
+    .link-voltar:hover { background: rgba(255, 255, 255, 0.15); }
+
     main {
       max-width: 760px;
       margin: 0 auto;
@@ -219,6 +233,7 @@
         <h1>Atualizar Catálogo</h1>
         <span>Auto Elétrica GP — publicação da nova tabela de preços</span>
       </div>
+      <a href="./" class="link-voltar">← Voltar ao catálogo</a>
     </div>
   </header>
 
@@ -290,7 +305,7 @@
   <script>
     // Repositório onde o site está publicado (GitHub Pages)
     const REPO_DONO = "AliceDomingos";
-    const REPO_NOME = "catalogo-eletrica";
+    const REPO_NOME = "catalogo-Valores";
     const REPO_BRANCH = "main";
     const ARQUIVO_ENC = "banco_de_dados.enc";
     const API_ARQUIVO = `https://api.github.com/repos/${REPO_DONO}/${REPO_NOME}/contents/${ARQUIVO_ENC}`;

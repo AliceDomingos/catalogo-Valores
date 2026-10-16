@@ -597,6 +597,8 @@
       font-weight: 600;
       cursor: pointer;
       display: none;
+      text-decoration: none;
+      white-space: nowrap;
     }
 
     .btn-sair:hover {
@@ -756,6 +758,7 @@
       <div class="status-bar">
         <span class="status-dot"></span>
         <span id="statusTexto">Carregando catálogo...</span>
+        <a href="atualizar.html" id="btnAtualizar" class="btn-sair" title="Publicar uma nova tabela de preços">Atualizar preços</a>
         <button type="button" id="btnSair" class="btn-sair" title="Bloquear o catálogo neste aparelho">Sair</button>
       </div>
     </div>
@@ -978,6 +981,7 @@
         ? `Tabela ref.: ${dados.data_tabela} • Atualizado: ${dados.ultima_atualizacao || "Hoje"}`
         : "";
       document.getElementById("btnSair").style.display = "inline-block";
+      document.getElementById("btnAtualizar").style.display = "inline-block";
 
       renderizarChips();
       atualizarLista();
